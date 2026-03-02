@@ -91,8 +91,23 @@ async function enrichBatch(batch) {
   try {
     results = JSON.parse(cleaned);
   } catch (e) {
+    // First parse failed — try regex fallback to handle escaped quotes inside notes
+    try {
+      const extracted = [];
+      const pattern = /\{\s*"index"\s*:\s*(\d+)\s*,\s*"notes"\s*:\s*"([\s\S]*?)"\s*\}/g;
+      let match;
+      while ((match = pattern.exec(cleaned)) !== null) {
+        extracted.push({
+          index: parseInt(match[1], 10),
+          notes: match[2].replace(/\\"/g, '"').replace(/\\n/g, ' ').trim(),
+        });
+      }
+      if (extracted.length > 0) {
+        console.log(`   ↩️  Recovered ${extracted.length} notes via fallback parser`);
+        return extracted;
+      }
+    } catch (_) {}
     console.error("⚠️  JSON parse failed for batch. Raw response:\n", text);
-    // Return empty notes rather than crashing
     return batch.map(({ i }) => ({ index: i, notes: "" }));
   }
 
@@ -119,8 +134,13 @@ async function main() {
     const batchRows = rows.slice(i, i + BATCH_SIZE);
     const batch = batchRows.map((row, offset) => ({ i: i + offset, row }));
 
-    // Skip rows that already have notes filled in
-    const toEnrich = batch.filter(({ row }) => !row["Notes"] || row["Notes"].trim() === "");
+    // Skip rows that already have notes filled in, or rows with missing data
+    const toEnrich = batch.filter(({ row }) => {
+      const hasNotes = row["Notes"] && row["Notes"].trim() !== "";
+      const hasData  = row["Store Name"] && row["Store Name"].trim() !== ""
+                    && row["Event"]      && row["Event"].trim()      !== "";
+      return !hasNotes && hasData;
+    });
     const alreadyDone = batch.filter(({ row }) => row["Notes"] && row["Notes"].trim() !== "");
 
     if (alreadyDone.length > 0) {
