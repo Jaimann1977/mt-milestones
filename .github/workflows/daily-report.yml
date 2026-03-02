@@ -1,0 +1,89 @@
+name: Daily Milestones Report
+
+on:
+  schedule:
+    # 5:01 AM UTC = 12:01 AM ET (EST) / 1:01 AM ET (EDT)
+    # GitHub Actions uses UTC. Adjust to 4:01 UTC in summer for EDT.
+    - cron: "1 5 * * 1-5"   # Mon–Fri only (remove 1-5 for every day)
+
+  # Allow manual trigger from GitHub Actions tab
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "Override date (YYYY-MM-DD, leave blank for today)"
+        required: false
+        default: ""
+      send_email:
+        description: "Send email?"
+        type: boolean
+        required: false
+        default: true
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      # ── 1. Checkout repo ─────────────────────────────────────
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ── 2. Setup Node ────────────────────────────────────────
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      # ── 3. Install dependencies ──────────────────────────────
+      - name: Install dependencies
+        run: npm ci
+
+      # ── 4. Install Puppeteer browser ─────────────────────────
+      - name: Install Chromium for Puppeteer
+        run: npx puppeteer browsers install chrome
+
+      # ── 5. Generate the HTML report ──────────────────────────
+      - name: Generate HTML Report
+        run: |
+          DATE_ARG="${{ github.event.inputs.date }}"
+          if [ -n "$DATE_ARG" ]; then
+            node scripts/generate-report.js $DATE_ARG
+          else
+            node scripts/generate-report.js
+          fi
+
+      # ── 6. Capture PDF ───────────────────────────────────────
+      - name: Capture PDF
+        run: node scripts/capture-pdf.js
+
+      # ── 7. Send Email ────────────────────────────────────────
+      - name: Send Email
+        if: ${{ github.event.inputs.send_email != 'false' }}
+        env:
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          REPORT_BASE_URL: ${{ secrets.REPORT_BASE_URL }}
+        run: node scripts/send-email.js
+
+      # ── 8. Commit generated files back to repo ───────────────
+      # This makes the report available to the deployed server
+      - name: Commit report to repo
+        run: |
+          git config user.name "MT Milestones Bot"
+          git config user.email "milestones-bot@musictoday.com"
+          git add public/report.html pdfs/ data/current-pdf.json
+          git diff --cached --quiet || git commit -m "📅 Daily report: $(date +%Y-%m-%d)"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ── 9. Upload PDF as workflow artifact (backup) ──────────
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: milestones-${{ github.run_id }}
+          path: pdfs/
+          retention-days: 7

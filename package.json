@@ -1,0 +1,25 @@
+{
+  "name": "mt-milestones",
+  "version": "1.0.0",
+  "description": "Musictoday Daily Client Milestones Report",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "enrich": "node scripts/enrich-notes.js",
+    "build-manifest": "node scripts/build-local-manifest.js",
+    "build-manifest-verbose": "node scripts/build-local-manifest.js --verbose",
+    "add-image": "node scripts/add-manual-image.js",
+    "generate": "node scripts/generate-report.js",
+    "capture": "node scripts/capture-pdf.js",
+    "email": "node scripts/send-email.js",
+    "daily": "node scripts/generate-report.js && node scripts/capture-pdf.js && node scripts/send-email.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "csv-parse": "^5.5.6",
+    "csv-stringify": "^6.4.6",
+    "express": "^4.18.2",
+    "nodemailer": "^6.9.9",
+    "puppeteer": "^22.0.0"
+  }
+}
