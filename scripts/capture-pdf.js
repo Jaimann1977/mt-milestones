@@ -61,7 +61,7 @@ async function main() {
   await page.goto(reportUrl, { waitUntil: "networkidle0", timeout: 30000 });
 
   // Wait for fonts and animations to settle
-  await page.waitForTimeout(1500);
+  await new Promise(r => setTimeout(r, 1500));
 
   // Set viewport to match the fixed 1280px design
   await page.setViewport({ width: 1280, height: 900, deviceScaleFactor: 2 });
