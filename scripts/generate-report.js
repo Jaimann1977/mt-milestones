@@ -16,19 +16,18 @@ const CSV_PATH = path.join(__dirname, "../data/milestones.csv");
 const OUTPUT_PATH = path.join(__dirname, "../public/report.html");
 
 // ─── Image source ──────────────────────────────────────────────────────────
-// Artist images come from Deezer CDN URLs stored in data/images-manifest.json.
+// Artist images come from local public/images/ folder.
 // Build the manifest by running: npm run build-manifest
 
 // ─── Date helpers ───────────────────────────────────────────────────────────
 function getTodayString() {
   const arg = process.argv[2];
-  if (arg) return arg; // allow date override from CLI
+  if (arg) return arg;
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
 function parseMilestoneDate(dateStr) {
-  // Dates in CSV are like "10/26/1993" (M/D/YYYY)
   const parts = dateStr.split("/");
   if (parts.length !== 3) return null;
   return {
@@ -52,8 +51,6 @@ function formatTodayFull(dateStr) {
 }
 
 // ─── Image URL builder ──────────────────────────────────────────────────────
-// Reads from data/images-manifest.json which maps artist names (lowercase)
-// to direct Deezer CDN image URLs. Built by: npm run build-manifest
 let _manifest = null;
 function getArtistImageUrl(artistName) {
   if (!_manifest) {
@@ -62,7 +59,12 @@ function getArtistImageUrl(artistName) {
       ? JSON.parse(fs.readFileSync(manifestPath, "utf8"))
       : {};
   }
-  return _manifest[artistName.toLowerCase().trim()] || null;
+  const raw = _manifest[artistName.toLowerCase().trim()];
+  if (!raw) return null;
+  // URL-encode the filename to handle spaces and special characters
+  const parts = raw.split('/');
+  parts[parts.length - 1] = encodeURIComponent(parts[parts.length - 1]);
+  return parts.join('/');
 }
 
 // ─── Event type badge config ────────────────────────────────────────────────
@@ -87,14 +89,12 @@ function main() {
   const raw = fs.readFileSync(CSV_PATH, "utf8");
   const allRows = parse(raw, { columns: true, skip_empty_lines: true, bom: true });
 
-  // Filter rows matching today's month and day
   const milestones = allRows.filter((row) => {
     const d = parseMilestoneDate(row["Event Date"]);
     if (!d) return false;
     return d.month === todayMonth && d.day === todayDay;
   });
 
-  // Sort by Anniversary Year descending (biggest milestones first)
   milestones.sort((a, b) => Number(b["Anniversary Year"]) - Number(a["Anniversary Year"]));
 
   console.log(`   Found ${milestones.length} milestones for today.`);
@@ -103,7 +103,6 @@ function main() {
     console.log("   No milestones today — generating empty state page.");
   }
 
-  // Deduplicate artists for the image grid
   const uniqueArtists = [...new Map(milestones.map((r) => [r["Store Name"], r])).values()];
 
   const html = buildHTML(milestones, uniqueArtists, todayStr);
@@ -116,9 +115,7 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
   const displayDate = formatTodayFull(todayStr);
   const tableRows = milestones.map((row) => buildTableRow(row)).join("\n");
   const artistCards = uniqueArtists.map((row) => buildArtistCard(row)).join("\n");
-  const modals = uniqueArtists.map((row) => buildModal(row)).join("\n");
 
-  // Layout decision: if > 12 milestone rows, put images on right; otherwise below
   const manyRows = milestones.length > 12;
 
   return `<!DOCTYPE html>
@@ -131,7 +128,6 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    /* ── Reset & base ───────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
@@ -156,6 +152,7 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
 
     html, body {
       width: 1280px;
+      min-width: 1280px;
       min-height: 100vh;
       background: var(--bg);
       color: var(--text);
@@ -164,7 +161,6 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── Noise texture overlay ───────────────────────────── */
     body::before {
       content: '';
       position: fixed;
@@ -176,7 +172,6 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
       opacity: 0.5;
     }
 
-    /* ── Layout wrapper ─────────────────────────────────── */
     .page {
       position: relative;
       z-index: 1;
@@ -186,7 +181,6 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
       flex-direction: column;
     }
 
-    /* ── Header ─────────────────────────────────────────── */
     .header {
       display: flex;
       align-items: center;
@@ -289,7 +283,6 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
       font-weight: 500;
     }
 
-    /* ── Main content area ──────────────────────────────── */
     .content {
       flex: 1;
       display: flex;
@@ -299,7 +292,6 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
       padding: 28px 36px;
     }
 
-    /* ── Table section ──────────────────────────────────── */
     .table-section {
       flex: ${manyRows ? "1" : "none"};
       min-width: 0;
@@ -420,7 +412,6 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
       color: var(--text-muted);
     }
 
-    /* ── Artists section ────────────────────────────────── */
     .artists-section {
       flex: ${manyRows ? "0 0 280px" : "none"};
       ${manyRows ? "padding-left: 28px; padding-top: 0;" : "margin-top: 28px;"}
@@ -523,16 +514,14 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--text-dim);
-      opacity: 0;
-      transition: opacity 0.2s;
+      display: none;
       font-family: var(--font-mono);
     }
 
     .artist-card:hover .tap-hint {
-      opacity: 1;
+      display: block;
     }
 
-    /* ── Empty state ────────────────────────────────────── */
     .empty-state {
       flex: 1;
       display: flex;
@@ -544,10 +533,7 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
       color: var(--text-dim);
     }
 
-    .empty-icon {
-      font-size: 48px;
-      opacity: 0.3;
-    }
+    .empty-icon { font-size: 48px; opacity: 0.3; }
 
     .empty-text {
       font-family: var(--font-head);
@@ -557,7 +543,6 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
       text-transform: uppercase;
     }
 
-    /* ── Footer ─────────────────────────────────────────── */
     .footer {
       border-top: 1px solid var(--border);
       padding: 12px 36px;
@@ -591,7 +576,6 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
       color: var(--accent);
     }
 
-    /* ── Modal ──────────────────────────────────────────── */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -662,9 +646,7 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
       background: linear-gradient(to top, var(--surface), transparent);
     }
 
-    .modal-body {
-      padding: 24px 28px 28px;
-    }
+    .modal-body { padding: 24px 28px 28px; }
 
     .modal-artist {
       font-family: var(--font-head);
@@ -693,10 +675,7 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
       padding-top: 16px;
     }
 
-    .modal-no-notes {
-      font-style: italic;
-      color: var(--text-muted);
-    }
+    .modal-no-notes { font-style: italic; color: var(--text-muted); }
 
     .modal-milestones {
       margin-top: 14px;
@@ -714,9 +693,7 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
       border-bottom: 1px solid var(--border);
     }
 
-    .modal-milestone-row:last-child {
-      border-bottom: none;
-    }
+    .modal-milestone-row:last-child { border-bottom: none; }
 
     .modal-close {
       position: absolute;
@@ -737,26 +714,19 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
       z-index: 10;
     }
 
-    .modal-close:hover {
-      background: var(--accent);
-    }
+    .modal-close:hover { background: var(--accent); }
 
-    /* ── Animations ─────────────────────────────────────── */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(10px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    .milestone-table tbody tr {
-      animation: fadeUp 0.3s ease both;
-    }
+    .milestone-table tbody tr { animation: fadeUp 0.3s ease both; }
 
     ${Array.from({ length: 30 }, (_, i) => `
     .milestone-table tbody tr:nth-child(${i + 1}) { animation-delay: ${i * 30}ms; }`).join("")}
 
-    .artist-card {
-      animation: fadeUp 0.4s ease both;
-    }
+    .artist-card { animation: fadeUp 0.4s ease both; }
 
     ${Array.from({ length: 20 }, (_, i) => `
     .artist-card:nth-child(${i + 1}) { animation-delay: ${200 + i * 50}ms; }`).join("")}
@@ -765,7 +735,6 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
 <body>
 <div class="page">
 
-  <!-- ── Header ──────────────────────────────────────────────── -->
   <header class="header">
     <div class="header-left">
       <img
@@ -787,7 +756,6 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
     </div>
   </header>
 
-  <!-- ── Main content ────────────────────────────────────────── -->
   <main class="content">
 
     ${
@@ -797,7 +765,6 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
              <div class="empty-text">No milestones today</div>
            </div>`
         : `
-    <!-- Table -->
     <div class="table-section">
       <div class="section-label">Client Milestones</div>
       <table class="milestone-table">
@@ -816,7 +783,6 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
       </table>
     </div>
 
-    <!-- Artist image grid -->
     <div class="artists-section">
       <div class="section-label">${manyRows ? "Artists" : "Featured Artists"} — click for details</div>
       <div class="artist-grid">
@@ -828,7 +794,6 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
 
   </main>
 
-  <!-- ── Footer ──────────────────────────────────────────────── -->
   <footer class="footer">
     <div class="footer-left">Generated ${new Date().toLocaleString("en-US", { timeZone: "America/New_York" })} ET · Musictoday Internal</div>
     <a href="/download" class="download-btn">↓ Download PDF</a>
@@ -836,16 +801,11 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
 
 </div>
 
-<!-- ── Modals ─────────────────────────────────────────────────── -->
-${modals}
-
-<!-- ── Single modal overlay ───────────────────────────────────── -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
   <div class="modal" id="modalContent"></div>
 </div>
 
 <script>
-  // Artist data map for modal population
   const artistData = ${JSON.stringify(
     uniqueArtists.reduce((acc, row) => {
       acc[row["Store Name"]] = {
@@ -866,11 +826,6 @@ ${modals}
     null,
     2
   )};
-
-  function getArtistImageUrlClient(name) {
-    // Will be populated by server-side rendering
-    return null;
-  }
 
   function openModal(artistName) {
     const data = artistData[artistName];
@@ -930,7 +885,6 @@ ${modals}
 </html>`;
 }
 
-// ─── Row builders ────────────────────────────────────────────────────────────
 function buildTableRow(row) {
   const { label, color } = getEventMeta(row["Event Type"]);
   const anni = Number(row["Anniversary Year"]);
@@ -962,11 +916,6 @@ function buildArtistCard(row) {
   <div class="artist-name">${escapeHtml(row["Store Name"])}</div>
   <div class="tap-hint">info</div>
 </div>`;
-}
-
-function buildModal(row) {
-  // Modals are now generated client-side via JS
-  return "";
 }
 
 function escapeHtml(str) {
