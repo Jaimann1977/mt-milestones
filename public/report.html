@@ -8,92 +8,417 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{
-      --bg:#0D0D0F;--surface:#16161A;--surface2:#1E1E24;--border:#2A2A32;
-      --text:#E8E8EE;--text-muted:#7A7A8C;--text-dim:#4A4A58;
-      --accent:#CC1E1E;--gold:#E8B86D;--green:#7EC8A4;--blue:#85A8D0;--red-soft:#C47A7A;
-      --radius:6px;--font-head:'Montserrat',sans-serif;--font-body:'Montserrat',sans-serif;--font-mono:'DM Mono',monospace;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #0D0D0F;
+      --surface:    #16161A;
+      --surface2:   #1E1E24;
+      --border:     #2A2A32;
+      --text:       #E8E8EE;
+      --text-muted: #7A7A8C;
+      --text-dim:   #4A4A58;
+      --accent:     #CC1E1E;
+      --gold:       #E8B86D;
+      --green:      #7EC8A4;
+      --blue:       #85A8D0;
+      --red-soft:   #C47A7A;
+      --radius:     6px;
+      --font-head:  'Montserrat', sans-serif;
+      --font-mono:  'DM Mono', monospace;
     }
-    html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:13px;-webkit-font-smoothing:antialiased;}
-    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");background-size:200px 200px;pointer-events:none;z-index:0;opacity:0.5;}
-    .page{position:relative;z-index:1;max-width:1280px;min-width:800px;width:100%;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;}
-    .header{display:flex;align-items:center;justify-content:space-between;padding:20px 36px 18px;border-bottom:1px solid var(--border);background:linear-gradient(to bottom,rgba(204,30,30,0.06) 0%,transparent 100%);position:relative;}
-    .header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,var(--accent),transparent);opacity:0.6;}
-    .header-left{display:flex;align-items:center;gap:16px;}
-    .logo{height:36px;width:auto;}
-    .logo-fallback{height:36px;display:flex;align-items:center;gap:8px;}
-    .logo-mark{width:36px;height:36px;background:var(--accent);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:16px;color:white;letter-spacing:-1px;}
-    .logo-text{font-family:var(--font-head);font-weight:800;font-size:15px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);}
-    .divider-v{width:1px;height:28px;background:var(--border);}
-    .header-title{font-family:var(--font-head);font-weight:800;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--text-muted);}
-    .header-right{text-align:right;}
-    .header-date{font-family:var(--font-head);font-weight:800;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;color:var(--text);}
-    .header-count{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);margin-top:3px;}
-    .header-count span{color:var(--accent);font-weight:500;}
-    .content{flex:1;padding:28px 36px;display:grid; grid-template-columns:1fr 260px; align-items:start;}
-    .table-section{min-width:0;}
-    .section-label{font-family:var(--font-head);font-weight:800;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--text-dim);margin-bottom:12px;}
-    .milestone-table{width:100%;border-collapse:collapse;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
-    .milestone-table thead th{background:var(--surface2);font-family:var(--font-head);font-weight:800;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);}
-    .milestone-table thead th:last-child{text-align:center;}
-    .milestone-table tbody tr{border-bottom:1px solid var(--border);transition:background 0.15s;}
-    .milestone-table tbody tr:last-child{border-bottom:none;}
-    .milestone-table tbody tr:hover{background:var(--surface2);}
-    .milestone-table td{padding:10px 14px;vertical-align:middle;}
-    .td-artist{font-family:var(--font-head);font-weight:700;font-size:13px;color:var(--text);white-space:nowrap;}
-    .td-event{font-size:13px;color:var(--text);max-width:340px;}
-    .td-date{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);white-space:nowrap;}
-    .td-type{padding:8px 14px;}
-    .badge{display:inline-block;font-family:var(--font-head);font-weight:800;font-size:8px;letter-spacing:0.15em;padding:3px 7px;border-radius:3px;background:rgba(255,255,255,0.06);border:1px solid currentColor;opacity:0.85;}
-    .td-anniversary{text-align:center;font-family:var(--font-mono);font-size:12px;}
-    .anniversary-chip{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;}
-    .anniversary-chip.significant{background:rgba(232,184,109,0.15);color:var(--gold);border:1px solid rgba(232,184,109,0.3);}
-    .anniversary-chip.normal{color:var(--text-muted);}
-    .artists-section{padding-left:24px; border-left:1px solid var(--border);}
-    .artist-grid{display:flex;flex-wrap:wrap;gap:8px;flex-direction:column;}
-    .artist-card{cursor:pointer;display:flex;align-items:center;flex-direction:row; width:100%; gap:10px;padding:8px;border-radius:var(--radius);border:1px solid transparent;transition:all 0.2s;}
-    .artist-card:hover{background:var(--surface2);border-color:var(--border);}
-    .artist-img-wrap{position:relative;flex-shrink:0;width:40px;height:40px;border-radius:50%;overflow:hidden;background:var(--surface2);border:2px solid var(--border);transition:border-color 0.2s;}
-    .artist-card:hover .artist-img-wrap{border-color:var(--accent);}
-    .artist-img{width:100%;height:100%;object-fit:cover;display:block;}
-    .artist-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:14px;color:var(--text-muted);background:linear-gradient(135deg,var(--surface2),var(--surface));}
-    .artist-name{font-family:var(--font-head);font-weight:700;color:var(--text);line-height:1.3;font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-    .empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:80px;color:var(--text-dim);}
-    .empty-icon{font-size:48px;opacity:0.3;}
-    .empty-text{font-family:var(--font-head);font-weight:800;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;}
-    .footer{border-top:1px solid var(--border);padding:12px 36px;display:flex;align-items:center;justify-content:space-between;}
-    .footer-left{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);}
-    .download-btn{font-family:var(--font-head);font-weight:800;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;padding:6px 14px;border:1px solid var(--border);border-radius:var(--radius);transition:all 0.15s;}
-    .download-btn:hover{border-color:var(--accent);color:var(--accent);}
-    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;z-index:1000;opacity:0;pointer-events:none;transition:opacity 0.25s;}
-    .modal-overlay.open{opacity:1;pointer-events:all;}
-    .modal{background:var(--surface);border:1px solid var(--border);border-radius:12px;width:480px;max-width:90vw;overflow:hidden;transform:translateY(20px) scale(0.97);transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 32px 80px rgba(0,0,0,0.6);}
-    .modal-overlay.open .modal{transform:translateY(0) scale(1);}
-    .modal-img-wrap{width:100%;height:220px;overflow:hidden;background:var(--surface2);position:relative;}
-    .modal-img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;}
-    .modal-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:64px;color:var(--text-dim);background:linear-gradient(135deg,var(--surface2),var(--bg));}
-    .modal-img-overlay{position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,var(--surface),transparent);}
-    .modal-body{padding:24px 28px 28px;}
-    .modal-artist{font-family:var(--font-head);font-weight:800;font-size:20px;color:var(--text);text-transform:uppercase;}
-    .modal-event{font-size:12px;color:var(--text-muted);margin-top:4px;}
-    .modal-notes{margin-top:16px;font-size:13px;line-height:1.7;color:var(--text);border-top:1px solid var(--border);padding-top:16px;}
-    .modal-no-notes{font-style:italic;color:var(--text-muted);}
-    .modal-milestones{margin-top:14px;display:flex;flex-direction:column;gap:4px;}
-    .modal-milestone-row{font-size:11px;color:var(--text-muted);display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);}
-    .modal-milestone-row:last-child{border-bottom:none;}
-    .modal-close{position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1);color:white;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.15s;z-index:10;}
-    .modal-close:hover{background:var(--accent);}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-    .milestone-table tbody tr{animation:fadeUp 0.3s ease both;}
-    .milestone-table tbody tr:nth-child(1){animation-delay:0ms};.milestone-table tbody tr:nth-child(2){animation-delay:25ms};.milestone-table tbody tr:nth-child(3){animation-delay:50ms};.milestone-table tbody tr:nth-child(4){animation-delay:75ms};.milestone-table tbody tr:nth-child(5){animation-delay:100ms};.milestone-table tbody tr:nth-child(6){animation-delay:125ms};.milestone-table tbody tr:nth-child(7){animation-delay:150ms};.milestone-table tbody tr:nth-child(8){animation-delay:175ms};.milestone-table tbody tr:nth-child(9){animation-delay:200ms};.milestone-table tbody tr:nth-child(10){animation-delay:225ms};.milestone-table tbody tr:nth-child(11){animation-delay:250ms};.milestone-table tbody tr:nth-child(12){animation-delay:275ms};.milestone-table tbody tr:nth-child(13){animation-delay:300ms};.milestone-table tbody tr:nth-child(14){animation-delay:325ms};.milestone-table tbody tr:nth-child(15){animation-delay:350ms};.milestone-table tbody tr:nth-child(16){animation-delay:375ms};.milestone-table tbody tr:nth-child(17){animation-delay:400ms};.milestone-table tbody tr:nth-child(18){animation-delay:425ms};.milestone-table tbody tr:nth-child(19){animation-delay:450ms};.milestone-table tbody tr:nth-child(20){animation-delay:475ms};.milestone-table tbody tr:nth-child(21){animation-delay:500ms};.milestone-table tbody tr:nth-child(22){animation-delay:525ms};.milestone-table tbody tr:nth-child(23){animation-delay:550ms};.milestone-table tbody tr:nth-child(24){animation-delay:575ms};.milestone-table tbody tr:nth-child(25){animation-delay:600ms};.milestone-table tbody tr:nth-child(26){animation-delay:625ms};.milestone-table tbody tr:nth-child(27){animation-delay:650ms};.milestone-table tbody tr:nth-child(28){animation-delay:675ms};.milestone-table tbody tr:nth-child(29){animation-delay:700ms};.milestone-table tbody tr:nth-child(30){animation-delay:725ms}
-    .artist-card{animation:fadeUp 0.3s ease both;}
-    .artist-card:nth-child(1){animation-delay:150ms};.artist-card:nth-child(2){animation-delay:190ms};.artist-card:nth-child(3){animation-delay:230ms};.artist-card:nth-child(4){animation-delay:270ms};.artist-card:nth-child(5){animation-delay:310ms};.artist-card:nth-child(6){animation-delay:350ms};.artist-card:nth-child(7){animation-delay:390ms};.artist-card:nth-child(8){animation-delay:430ms};.artist-card:nth-child(9){animation-delay:470ms};.artist-card:nth-child(10){animation-delay:510ms};.artist-card:nth-child(11){animation-delay:550ms};.artist-card:nth-child(12){animation-delay:590ms};.artist-card:nth-child(13){animation-delay:630ms};.artist-card:nth-child(14){animation-delay:670ms};.artist-card:nth-child(15){animation-delay:710ms};.artist-card:nth-child(16){animation-delay:750ms};.artist-card:nth-child(17){animation-delay:790ms};.artist-card:nth-child(18){animation-delay:830ms};.artist-card:nth-child(19){animation-delay:870ms};.artist-card:nth-child(20){animation-delay:910ms}
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-head);
+      font-size: 13px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* TV mode: locked to viewport, no scroll */
+    body.tv-mode {
+      overflow: hidden;
+    }
+
+    /* Expanded mode: full scroll */
+    body.expanded {
+      overflow-y: auto;
+      height: auto;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 200px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    /* ── Page shell ── */
+    .page {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body.tv-mode .page {
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    body.expanded .page {
+      height: auto;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    .header {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.6vh 2.8vw 1.4vh;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(to bottom, rgba(204,30,30,0.06), transparent);
+      position: relative;
+    }
+
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--accent), transparent);
+      opacity: 0.6;
+    }
+
+    .header-left  { display: flex; align-items: center; gap: 1.2vw; }
+    .logo         { height: 3.2vh; width: auto; }
+
+    .logo-fallback {
+      height: 3.2vh;
+      display: flex;
+      align-items: center;
+      gap: 0.6vw;
+    }
+
+    .logo-mark {
+      height: 3.2vh; width: 3.2vh;
+      background: var(--accent);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 1.4vh; color: white; letter-spacing: -1px;
+    }
+
+    .logo-text {
+      font-weight: 800; font-size: 1.4vh;
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+
+    .divider-v    { width: 1px; height: 2.4vh; background: var(--border); }
+
+    .header-title {
+      font-weight: 800; font-size: 0.9vh;
+      letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-muted);
+    }
+
+    .header-right { text-align: right; }
+
+    .header-date {
+      font-weight: 800; font-size: 1.1vh;
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+
+    .header-count {
+      font-family: var(--font-mono); font-size: 1vh; color: var(--text-muted); margin-top: 0.3vh;
+    }
+
+    .header-count span { color: var(--accent); font-weight: 500; }
+
+    /* ── Main content: CSS grid ── */
+    .content {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1fr 22vw;
+      padding: 1.8vh 2.8vw;
+      gap: 0;
+      align-items: start;
+      overflow: hidden;
+    }
+
+    body.expanded .content {
+      overflow: visible;
+      height: auto;
+    }
+
+    /* ── Table section ── */
+    .table-section { min-width: 0; overflow: hidden; }
+
+    body.expanded .table-section { overflow: visible; }
+
+    .section-label {
+      font-weight: 800; font-size: 0.75vh;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--text-dim); margin-bottom: 1vh;
+    }
+
+    .milestone-table {
+      width: 100%; border-collapse: collapse;
+      border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
+    }
+
+    .milestone-table thead th {
+      background: var(--surface2);
+      font-weight: 800; font-size: 0.75vh;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted);
+      padding: 0.8vh 1.2vw; text-align: left; border-bottom: 1px solid var(--border);
+    }
+
+    .milestone-table thead th:last-child { text-align: center; }
+
+    .milestone-table tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+
+    .milestone-table tbody tr:last-child { border-bottom: none; }
+    .milestone-table tbody tr:hover      { background: var(--surface2); }
+
+    /* Hidden rows in TV mode */
+    body.tv-mode .milestone-table tbody tr.tv-hidden { display: none; }
+
+    .milestone-table td { padding: 0.7vh 1.2vw; vertical-align: middle; }
+
+    .td-artist { font-weight: 700; font-size: 1.15vh; white-space: nowrap; }
+    .td-event  { font-size: 1.1vh; max-width: 30vw; }
+    .td-date   { font-family: var(--font-mono); font-size: 0.95vh; color: var(--text-muted); white-space: nowrap; }
+    .td-type   { padding: 0.6vh 1.2vw; }
+
+    .badge {
+      display: inline-block;
+      font-weight: 800; font-size: 0.7vh;
+      letter-spacing: 0.15em; padding: 0.25vh 0.6vw;
+      border-radius: 3px; background: rgba(255,255,255,0.06);
+      border: 1px solid currentColor; opacity: 0.85;
+    }
+
+    .td-anniversary { text-align: center; font-family: var(--font-mono); font-size: 1vh; }
+
+    .anniversary-chip {
+      display: inline-block; padding: 0.25vh 0.8vw;
+      border-radius: 20px; font-size: 0.95vh; font-weight: 500;
+    }
+
+    .anniversary-chip.significant {
+      background: rgba(232,184,109,0.15); color: var(--gold);
+      border: 1px solid rgba(232,184,109,0.3);
+    }
+
+    .anniversary-chip.normal { color: var(--text-muted); }
+
+    /* ── Artist sidebar ── */
+    .artists-section {
+      padding-left: 2vw;
+      border-left: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    body.expanded .artists-section { overflow: visible; }
+
+    .artist-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6vh;
+    }
+
+    /* Hidden artists in TV mode */
+    body.tv-mode .artist-card.tv-hidden { display: none; }
+
+    .artist-card {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.8vw;
+      padding: 0.5vh 0.6vw;
+      border-radius: var(--radius);
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .artist-card:hover { background: var(--surface2); border-color: var(--border); }
+    .artist-card:hover .artist-img-wrap { border-color: var(--accent); }
+
+    .artist-img-wrap {
+      flex-shrink: 0;
+      width: 3.8vh; height: 3.8vh;
+      border-radius: 50%;
+      overflow: hidden;
+      background: var(--surface2);
+      border: 2px solid var(--border);
+      transition: border-color 0.2s;
+    }
+
+    .artist-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .artist-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 1.4vh; color: var(--text-muted);
+      background: linear-gradient(135deg, var(--surface2), var(--surface));
+    }
+
+    .artist-name {
+      font-weight: 700; font-size: 1.1vh; color: var(--text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      line-height: 1.3;
+    }
+
+    /* ── Empty state ── */
+    .empty-state {
+      grid-column: 1 / -1;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 1.2vh; height: 60vh; color: var(--text-dim);
+    }
+
+    .empty-icon  { font-size: 5vh; opacity: 0.3; }
+    .empty-text  { font-weight: 800; font-size: 1vh; letter-spacing: 0.2em; text-transform: uppercase; }
+
+    /* ── Footer ── */
+    .footer {
+      flex-shrink: 0;
+      border-top: 1px solid var(--border);
+      padding: 0.8vh 2.8vw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-left { font-family: var(--font-mono); font-size: 0.85vh; color: var(--text-dim); }
+
+    .footer-right { display: flex; align-items: center; gap: 1vw; }
+
+    /* Expand/collapse button — subtle, only visible up close */
+    .expand-btn {
+      font-weight: 800; font-size: 0.75vh;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text-dim); background: none;
+      border: 1px solid var(--text-dim); border-radius: var(--radius);
+      padding: 0.4vh 0.8vw; cursor: pointer;
+      transition: all 0.15s; opacity: 0.5;
+    }
+
+    .expand-btn:hover { color: var(--text-muted); border-color: var(--text-muted); opacity: 1; }
+
+    .download-btn {
+      font-weight: 800; font-size: 0.75vh;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none;
+      padding: 0.4vh 0.8vw;
+      border: 1px solid var(--border); border-radius: var(--radius);
+      transition: all 0.15s;
+    }
+
+    .download-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; width: min(480px, 90vw); overflow: hidden;
+      transform: translateY(20px) scale(0.97);
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+    }
+
+    .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+
+    .modal-img-wrap {
+      width: 100%; height: 22vh; min-height: 140px;
+      overflow: hidden; background: var(--surface2); position: relative;
+    }
+
+    .modal-img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+
+    .modal-img-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 6vh; color: var(--text-dim);
+      background: linear-gradient(135deg, var(--surface2), var(--bg));
+    }
+
+    .modal-img-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 60px;
+      background: linear-gradient(to top, var(--surface), transparent);
+    }
+
+    .modal-body    { padding: 2vh 2vw 2.4vh; }
+    .modal-artist  { font-weight: 800; font-size: 1.8vh; text-transform: uppercase; }
+    .modal-event   { font-size: 1.2vh; color: var(--text-muted); margin-top: 0.4vh; }
+
+    .modal-notes {
+      margin-top: 1.4vh; font-size: 1.2vh; line-height: 1.7;
+      border-top: 1px solid var(--border); padding-top: 1.4vh;
+    }
+
+    .modal-no-notes { font-style: italic; color: var(--text-muted); }
+
+    .modal-milestones { margin-top: 1.2vh; display: flex; flex-direction: column; gap: 0.4vh; }
+
+    .modal-milestone-row {
+      font-size: 1vh; color: var(--text-muted);
+      display: flex; justify-content: space-between;
+      padding: 0.4vh 0; border-bottom: 1px solid var(--border);
+    }
+
+    .modal-milestone-row:last-child { border-bottom: none; }
+
+    .modal-close {
+      position: absolute; top: 1vh; right: 1vw;
+      width: 3vh; height: 3vh; border-radius: 50%;
+      background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.15);
+      color: white; font-size: 1.2vh; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s; z-index: 10;
+    }
+
+    .modal-close:hover { background: var(--accent); }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .milestone-table tbody tr { animation: fadeUp 0.25s ease both; }
+    .milestone-table tbody tr:nth-child(1) { animation-delay: 0ms; } .milestone-table tbody tr:nth-child(2) { animation-delay: 20ms; } .milestone-table tbody tr:nth-child(3) { animation-delay: 40ms; } .milestone-table tbody tr:nth-child(4) { animation-delay: 60ms; } .milestone-table tbody tr:nth-child(5) { animation-delay: 80ms; } .milestone-table tbody tr:nth-child(6) { animation-delay: 100ms; } .milestone-table tbody tr:nth-child(7) { animation-delay: 120ms; } .milestone-table tbody tr:nth-child(8) { animation-delay: 140ms; } .milestone-table tbody tr:nth-child(9) { animation-delay: 160ms; } .milestone-table tbody tr:nth-child(10) { animation-delay: 180ms; } .milestone-table tbody tr:nth-child(11) { animation-delay: 200ms; } .milestone-table tbody tr:nth-child(12) { animation-delay: 220ms; } .milestone-table tbody tr:nth-child(13) { animation-delay: 240ms; } .milestone-table tbody tr:nth-child(14) { animation-delay: 260ms; } .milestone-table tbody tr:nth-child(15) { animation-delay: 280ms; } .milestone-table tbody tr:nth-child(16) { animation-delay: 300ms; } .milestone-table tbody tr:nth-child(17) { animation-delay: 320ms; } .milestone-table tbody tr:nth-child(18) { animation-delay: 340ms; } .milestone-table tbody tr:nth-child(19) { animation-delay: 360ms; } .milestone-table tbody tr:nth-child(20) { animation-delay: 380ms; } .milestone-table tbody tr:nth-child(21) { animation-delay: 400ms; } .milestone-table tbody tr:nth-child(22) { animation-delay: 420ms; } .milestone-table tbody tr:nth-child(23) { animation-delay: 440ms; } .milestone-table tbody tr:nth-child(24) { animation-delay: 460ms; } .milestone-table tbody tr:nth-child(25) { animation-delay: 480ms; } .milestone-table tbody tr:nth-child(26) { animation-delay: 500ms; } .milestone-table tbody tr:nth-child(27) { animation-delay: 520ms; } .milestone-table tbody tr:nth-child(28) { animation-delay: 540ms; } .milestone-table tbody tr:nth-child(29) { animation-delay: 560ms; } .milestone-table tbody tr:nth-child(30) { animation-delay: 580ms; }
+
+    .artist-card { animation: fadeUp 0.25s ease both; }
+    .artist-card:nth-child(1) { animation-delay: 100ms; } .artist-card:nth-child(2) { animation-delay: 130ms; } .artist-card:nth-child(3) { animation-delay: 160ms; } .artist-card:nth-child(4) { animation-delay: 190ms; } .artist-card:nth-child(5) { animation-delay: 220ms; } .artist-card:nth-child(6) { animation-delay: 250ms; } .artist-card:nth-child(7) { animation-delay: 280ms; } .artist-card:nth-child(8) { animation-delay: 310ms; } .artist-card:nth-child(9) { animation-delay: 340ms; } .artist-card:nth-child(10) { animation-delay: 370ms; } .artist-card:nth-child(11) { animation-delay: 400ms; } .artist-card:nth-child(12) { animation-delay: 430ms; } .artist-card:nth-child(13) { animation-delay: 460ms; } .artist-card:nth-child(14) { animation-delay: 490ms; } .artist-card:nth-child(15) { animation-delay: 520ms; } .artist-card:nth-child(16) { animation-delay: 550ms; } .artist-card:nth-child(17) { animation-delay: 580ms; } .artist-card:nth-child(18) { animation-delay: 610ms; } .artist-card:nth-child(19) { animation-delay: 640ms; } .artist-card:nth-child(20) { animation-delay: 670ms; }
   </style>
 </head>
-<body>
+<body class="tv-mode">
 <div class="page">
 
+  <!-- Header -->
   <header class="header">
     <div class="header-left">
       <img src="/mtlogo_long.png" alt="Musictoday" class="logo"
@@ -111,8 +436,10 @@
     </div>
   </header>
 
+  <!-- Content -->
   <main class="content">
     
+
     <div class="table-section">
       <div class="section-label">Client Milestones</div>
       <table class="milestone-table">
@@ -125,7 +452,8 @@
             <th>Anniversary</th>
           </tr>
         </thead>
-        <tbody><tr>
+        <tbody>
+          <tr>
   <td class="td-artist">Stevie Wonder</td>
   <td class="td-event">Music of My Mind album released</td>
   <td class="td-date">Mar 3, 1972</td>
@@ -223,25 +551,28 @@
   <td class="td-type"><span class="badge" style="color:#E8B86D;border-color:#E8B86D40">ALBUM</span></td>
   <td class="td-anniversary"><span class="anniversary-chip normal">11 yrs</span></td>
 </tr>
-<tr>
+<tr class="tv-hidden">
   <td class="td-artist">Brandi Carlile</td>
   <td class="td-event">The Firewatcher's Daughter album released</td>
   <td class="td-date">Mar 3, 2015</td>
   <td class="td-type"><span class="badge" style="color:#E8B86D;border-color:#E8B86D40">ALBUM</span></td>
   <td class="td-anniversary"><span class="anniversary-chip normal">11 yrs</span></td>
 </tr>
-<tr>
+<tr class="tv-hidden">
   <td class="td-artist">ATO Records</td>
   <td class="td-event">Chicano Batman &quot;Freedom Is Free&quot; album released</td>
   <td class="td-date">Mar 3, 2017</td>
   <td class="td-type"><span class="badge" style="color:#E8B86D;border-color:#E8B86D40">ALBUM</span></td>
   <td class="td-anniversary"><span class="anniversary-chip normal">9 yrs</span></td>
-</tr></tbody>
+</tr>
+        </tbody>
       </table>
     </div>
+
     <div class="artists-section">
       <div class="section-label">Artists — click for details</div>
-      <div class="artist-grid"><div class="artist-card" onclick="openModal('Stevie Wonder')"><div class="artist-img-wrap"><img class="artist-img" src="images/Stevie%20Wonder.jpg" alt="Stevie Wonder" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">S</div></div><div class="artist-name">Stevie Wonder</div></div>
+      <div class="artist-grid">
+        <div class="artist-card" onclick="openModal('Stevie Wonder')"><div class="artist-img-wrap"><img class="artist-img" src="images/Stevie%20Wonder.jpg" alt="Stevie Wonder" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">S</div></div><div class="artist-name">Stevie Wonder</div></div>
 <div class="artist-card" onclick="openModal('Genesis')"><div class="artist-img-wrap"><img class="artist-img" src="images/Genesis.jpg" alt="Genesis" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">G</div></div><div class="artist-name">Genesis</div></div>
 <div class="artist-card" onclick="openModal('Frank Zappa')"><div class="artist-img-wrap"><img class="artist-img" src="images/Frank%20Zappa.jpg" alt="Frank Zappa" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">F</div></div><div class="artist-name">Frank Zappa</div></div>
 <div class="artist-card" onclick="openModal('Loretta Lynn')"><div class="artist-img-wrap"><img class="artist-img" src="images/Loretta%20Lynn.jpg" alt="Loretta Lynn" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">L</div></div><div class="artist-name">Loretta Lynn</div></div>
@@ -251,25 +582,34 @@
 <div class="artist-card" onclick="openModal('Foo Fighters')"><div class="artist-img-wrap"><img class="artist-img" src="images/Foo%20Fighters.jpg" alt="Foo Fighters" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">F</div></div><div class="artist-name">Foo Fighters</div></div>
 <div class="artist-card" onclick="openModal('Camila Cabello')"><div class="artist-img-wrap"><img class="artist-img" src="images/Camila%20Cabello.jpg" alt="Camila Cabello" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">C</div></div><div class="artist-name">Camila Cabello</div></div>
 <div class="artist-card" onclick="openModal('U2 Shop')"><div class="artist-img-wrap"><img class="artist-img" src="images/U2.jpg" alt="U2 Shop" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">U</div></div><div class="artist-name">U2 Shop</div></div>
-<div class="artist-card" onclick="openModal('BabyMetal')"><div class="artist-img-wrap"><img class="artist-img" src="images/BabyMetal.jpg" alt="BabyMetal" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">B</div></div><div class="artist-name">BabyMetal</div></div>
-<div class="artist-card" onclick="openModal('Dale Earnhardt Jr')"><div class="artist-img-wrap"><img class="artist-img" src="images/Dale%20Earnhardt%20Jr.jpg" alt="Dale Earnhardt Jr" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">D</div></div><div class="artist-name">Dale Earnhardt Jr</div></div>
-<div class="artist-card" onclick="openModal('ATO Records')"><div class="artist-img-wrap"><div class="artist-placeholder">A</div></div><div class="artist-name">ATO Records</div></div>
-<div class="artist-card" onclick="openModal('Brandi Carlile')"><div class="artist-img-wrap"><img class="artist-img" src="images/Brandi%20Carlile.jpg" alt="Brandi Carlile" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">B</div></div><div class="artist-name">Brandi Carlile</div></div></div>
+<div class="artist-card tv-hidden" onclick="openModal('BabyMetal')"><div class="artist-img-wrap"><img class="artist-img" src="images/BabyMetal.jpg" alt="BabyMetal" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">B</div></div><div class="artist-name">BabyMetal</div></div>
+<div class="artist-card tv-hidden" onclick="openModal('Dale Earnhardt Jr')"><div class="artist-img-wrap"><img class="artist-img" src="images/Dale%20Earnhardt%20Jr.jpg" alt="Dale Earnhardt Jr" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">D</div></div><div class="artist-name">Dale Earnhardt Jr</div></div>
+<div class="artist-card tv-hidden" onclick="openModal('ATO Records')"><div class="artist-img-wrap"><div class="artist-placeholder">A</div></div><div class="artist-name">ATO Records</div></div>
+<div class="artist-card tv-hidden" onclick="openModal('Brandi Carlile')"><div class="artist-img-wrap"><img class="artist-img" src="images/Brandi%20Carlile.jpg" alt="Brandi Carlile" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">B</div></div><div class="artist-name">Brandi Carlile</div></div>
+      </div>
     </div>
   </main>
 
+  <!-- Footer -->
   <footer class="footer">
-    <div class="footer-left">Generated 3/3/2026, 1:20:11 PM ET · Musictoday Internal</div>
-    <a href="/download" class="download-btn">↓ Download PDF</a>
+    <div class="footer-left">
+      Generated 3/3/2026, 5:57:33 PM ET · Musictoday Internal
+    </div>
+    <div class="footer-right">
+      <button class="expand-btn" id="expandBtn" onclick="toggleExpand()">Show all ↓</button>
+      <a href="/download" class="download-btn">↓ Download PDF</a>
+    </div>
   </footer>
 
 </div>
 
+<!-- Modal -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
   <div class="modal" id="modalContent"></div>
 </div>
 
 <script>
+  // ── Artist data ──────────────────────────────────────────────────────────
   const artistData = {
   "Stevie Wonder": {
     "name": "Stevie Wonder",
@@ -467,9 +807,28 @@
   }
 };
 
+  // ── TV / Expand toggle ───────────────────────────────────────────────────
+  let expanded = false;
+
+  function toggleExpand() {
+    expanded = !expanded;
+    document.body.classList.toggle("tv-mode", !expanded);
+    document.body.classList.toggle("expanded", expanded);
+    const btn = document.getElementById("expandBtn");
+    if (btn) btn.textContent = expanded ? "Collapse ↑" : "Show all ↓";
+  }
+
+  // ── Auto-refresh every 5 minutes ─────────────────────────────────────────
+  // Reload only if in TV mode (not expanded) so desktop users aren't interrupted
+  setInterval(() => {
+    if (!expanded) window.location.reload();
+  }, 300000);
+
+  // ── Modal ────────────────────────────────────────────────────────────────
   function openModal(artistName) {
     const data = artistData[artistName];
     if (!data) return;
+
     const overlay = document.getElementById("modalOverlay");
     const content = document.getElementById("modalContent");
 
@@ -490,16 +849,16 @@
     const milestoneRows = data.milestones.map(m =>
       `<div class="modal-milestone-row">
          <span>${m.event}</span>
-         <span style="color:${m.significant?'var(--gold)':'var(--text-muted)'};font-weight:500">${m.anniversary}-Year</span>
+         <span style="color:${m.significant ? 'var(--gold)' : 'var(--text-muted)'};font-weight:500">${m.anniversary}-Year</span>
        </div>`
     ).join("");
 
     content.innerHTML = `${imgHtml}
       <div class="modal-body">
         <div class="modal-artist">${data.name}</div>
-        <div class="modal-event">${data.milestones.length} milestone${data.milestones.length!==1?"s":""} today</div>
-        <div class="modal-notes">${data.notes||'<span class="modal-no-notes">Historical notes coming soon.</span>'}</div>
-        ${data.milestones.length>1?`<div class="modal-milestones">${milestoneRows}</div>`:""}
+        <div class="modal-event">${data.milestones.length} milestone${data.milestones.length !== 1 ? "s" : ""} today</div>
+        <div class="modal-notes">${data.notes || '<span class="modal-no-notes">Historical notes coming soon.</span>'}</div>
+        ${data.milestones.length > 1 ? `<div class="modal-milestones">${milestoneRows}</div>` : ""}
       </div>`;
 
     overlay.classList.add("open");
