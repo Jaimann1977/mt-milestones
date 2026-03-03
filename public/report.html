@@ -8,7 +8,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    /* ── Reset & base ───────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
@@ -33,6 +32,7 @@
 
     html, body {
       width: 1280px;
+      min-width: 1280px;
       min-height: 100vh;
       background: var(--bg);
       color: var(--text);
@@ -41,7 +41,6 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── Noise texture overlay ───────────────────────────── */
     body::before {
       content: '';
       position: fixed;
@@ -53,7 +52,6 @@
       opacity: 0.5;
     }
 
-    /* ── Layout wrapper ─────────────────────────────────── */
     .page {
       position: relative;
       z-index: 1;
@@ -63,7 +61,6 @@
       flex-direction: column;
     }
 
-    /* ── Header ─────────────────────────────────────────── */
     .header {
       display: flex;
       align-items: center;
@@ -166,7 +163,6 @@
       font-weight: 500;
     }
 
-    /* ── Main content area ──────────────────────────────── */
     .content {
       flex: 1;
       display: flex;
@@ -176,7 +172,6 @@
       padding: 28px 36px;
     }
 
-    /* ── Table section ──────────────────────────────────── */
     .table-section {
       flex: 1;
       min-width: 0;
@@ -297,7 +292,6 @@
       color: var(--text-muted);
     }
 
-    /* ── Artists section ────────────────────────────────── */
     .artists-section {
       flex: 0 0 280px;
       padding-left: 28px; padding-top: 0;
@@ -400,16 +394,14 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--text-dim);
-      opacity: 0;
-      transition: opacity 0.2s;
+      display: none;
       font-family: var(--font-mono);
     }
 
     .artist-card:hover .tap-hint {
-      opacity: 1;
+      display: block;
     }
 
-    /* ── Empty state ────────────────────────────────────── */
     .empty-state {
       flex: 1;
       display: flex;
@@ -421,10 +413,7 @@
       color: var(--text-dim);
     }
 
-    .empty-icon {
-      font-size: 48px;
-      opacity: 0.3;
-    }
+    .empty-icon { font-size: 48px; opacity: 0.3; }
 
     .empty-text {
       font-family: var(--font-head);
@@ -434,7 +423,6 @@
       text-transform: uppercase;
     }
 
-    /* ── Footer ─────────────────────────────────────────── */
     .footer {
       border-top: 1px solid var(--border);
       padding: 12px 36px;
@@ -468,7 +456,6 @@
       color: var(--accent);
     }
 
-    /* ── Modal ──────────────────────────────────────────── */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -539,9 +526,7 @@
       background: linear-gradient(to top, var(--surface), transparent);
     }
 
-    .modal-body {
-      padding: 24px 28px 28px;
-    }
+    .modal-body { padding: 24px 28px 28px; }
 
     .modal-artist {
       font-family: var(--font-head);
@@ -570,10 +555,7 @@
       padding-top: 16px;
     }
 
-    .modal-no-notes {
-      font-style: italic;
-      color: var(--text-muted);
-    }
+    .modal-no-notes { font-style: italic; color: var(--text-muted); }
 
     .modal-milestones {
       margin-top: 14px;
@@ -591,9 +573,7 @@
       border-bottom: 1px solid var(--border);
     }
 
-    .modal-milestone-row:last-child {
-      border-bottom: none;
-    }
+    .modal-milestone-row:last-child { border-bottom: none; }
 
     .modal-close {
       position: absolute;
@@ -614,19 +594,14 @@
       z-index: 10;
     }
 
-    .modal-close:hover {
-      background: var(--accent);
-    }
+    .modal-close:hover { background: var(--accent); }
 
-    /* ── Animations ─────────────────────────────────────── */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(10px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    .milestone-table tbody tr {
-      animation: fadeUp 0.3s ease both;
-    }
+    .milestone-table tbody tr { animation: fadeUp 0.3s ease both; }
 
     
     .milestone-table tbody tr:nth-child(1) { animation-delay: 0ms; }
@@ -660,9 +635,7 @@
     .milestone-table tbody tr:nth-child(29) { animation-delay: 840ms; }
     .milestone-table tbody tr:nth-child(30) { animation-delay: 870ms; }
 
-    .artist-card {
-      animation: fadeUp 0.4s ease both;
-    }
+    .artist-card { animation: fadeUp 0.4s ease both; }
 
     
     .artist-card:nth-child(1) { animation-delay: 200ms; }
@@ -690,7 +663,6 @@
 <body>
 <div class="page">
 
-  <!-- ── Header ──────────────────────────────────────────────── -->
   <header class="header">
     <div class="header-left">
       <img
@@ -712,11 +684,9 @@
     </div>
   </header>
 
-  <!-- ── Main content ────────────────────────────────────────── -->
   <main class="content">
 
     
-    <!-- Table -->
     <div class="table-section">
       <div class="section-label">Client Milestones</div>
       <table class="milestone-table">
@@ -910,12 +880,11 @@
       </table>
     </div>
 
-    <!-- Artist image grid -->
     <div class="artists-section">
       <div class="section-label">Artists — click for details</div>
       <div class="artist-grid">
         <div class="artist-card" onclick="openModal('Stevie Wonder')">
-  <div class="artist-img-wrap"><img class="artist-img" src="images/Stevie Wonder.jpg" alt="Stevie Wonder" onerror="this.parentElement.innerHTML='<div class=\"artist-placeholder\">S</div>'"></div>
+  <div class="artist-img-wrap"><img class="artist-img" src="images/Stevie%20Wonder.jpg" alt="Stevie Wonder" onerror="this.parentElement.innerHTML='<div class=\"artist-placeholder\">S</div>'"></div>
   <div class="artist-name">Stevie Wonder</div>
   <div class="tap-hint">info</div>
 </div>
@@ -925,12 +894,12 @@
   <div class="tap-hint">info</div>
 </div>
 <div class="artist-card" onclick="openModal('Frank Zappa')">
-  <div class="artist-img-wrap"><img class="artist-img" src="images/Frank Zappa.jpg" alt="Frank Zappa" onerror="this.parentElement.innerHTML='<div class=\"artist-placeholder\">F</div>'"></div>
+  <div class="artist-img-wrap"><img class="artist-img" src="images/Frank%20Zappa.jpg" alt="Frank Zappa" onerror="this.parentElement.innerHTML='<div class=\"artist-placeholder\">F</div>'"></div>
   <div class="artist-name">Frank Zappa</div>
   <div class="tap-hint">info</div>
 </div>
 <div class="artist-card" onclick="openModal('Loretta Lynn')">
-  <div class="artist-img-wrap"><img class="artist-img" src="images/Loretta Lynn.jpg" alt="Loretta Lynn" onerror="this.parentElement.innerHTML='<div class=\"artist-placeholder\">L</div>'"></div>
+  <div class="artist-img-wrap"><img class="artist-img" src="images/Loretta%20Lynn.jpg" alt="Loretta Lynn" onerror="this.parentElement.innerHTML='<div class=\"artist-placeholder\">L</div>'"></div>
   <div class="artist-name">Loretta Lynn</div>
   <div class="tap-hint">info</div>
 </div>
@@ -940,7 +909,7 @@
   <div class="tap-hint">info</div>
 </div>
 <div class="artist-card" onclick="openModal('De La Soul')">
-  <div class="artist-img-wrap"><img class="artist-img" src="images/De La Soul.jpg" alt="De La Soul" onerror="this.parentElement.innerHTML='<div class=\"artist-placeholder\">D</div>'"></div>
+  <div class="artist-img-wrap"><img class="artist-img" src="images/De%20La%20Soul.jpg" alt="De La Soul" onerror="this.parentElement.innerHTML='<div class=\"artist-placeholder\">D</div>'"></div>
   <div class="artist-name">De La Soul</div>
   <div class="tap-hint">info</div>
 </div>
@@ -950,12 +919,12 @@
   <div class="tap-hint">info</div>
 </div>
 <div class="artist-card" onclick="openModal('Foo Fighters')">
-  <div class="artist-img-wrap"><img class="artist-img" src="images/Foo Fighters.jpg" alt="Foo Fighters" onerror="this.parentElement.innerHTML='<div class=\"artist-placeholder\">F</div>'"></div>
+  <div class="artist-img-wrap"><img class="artist-img" src="images/Foo%20Fighters.jpg" alt="Foo Fighters" onerror="this.parentElement.innerHTML='<div class=\"artist-placeholder\">F</div>'"></div>
   <div class="artist-name">Foo Fighters</div>
   <div class="tap-hint">info</div>
 </div>
 <div class="artist-card" onclick="openModal('Camila Cabello')">
-  <div class="artist-img-wrap"><img class="artist-img" src="images/Camila Cabello.jpg" alt="Camila Cabello" onerror="this.parentElement.innerHTML='<div class=\"artist-placeholder\">C</div>'"></div>
+  <div class="artist-img-wrap"><img class="artist-img" src="images/Camila%20Cabello.jpg" alt="Camila Cabello" onerror="this.parentElement.innerHTML='<div class=\"artist-placeholder\">C</div>'"></div>
   <div class="artist-name">Camila Cabello</div>
   <div class="tap-hint">info</div>
 </div>
@@ -970,7 +939,7 @@
   <div class="tap-hint">info</div>
 </div>
 <div class="artist-card" onclick="openModal('Dale Earnhardt Jr')">
-  <div class="artist-img-wrap"><img class="artist-img" src="images/Dale Earnhardt Jr.jpg" alt="Dale Earnhardt Jr" onerror="this.parentElement.innerHTML='<div class=\"artist-placeholder\">D</div>'"></div>
+  <div class="artist-img-wrap"><img class="artist-img" src="images/Dale%20Earnhardt%20Jr.jpg" alt="Dale Earnhardt Jr" onerror="this.parentElement.innerHTML='<div class=\"artist-placeholder\">D</div>'"></div>
   <div class="artist-name">Dale Earnhardt Jr</div>
   <div class="tap-hint">info</div>
 </div>
@@ -980,7 +949,7 @@
   <div class="tap-hint">info</div>
 </div>
 <div class="artist-card" onclick="openModal('Brandi Carlile')">
-  <div class="artist-img-wrap"><img class="artist-img" src="images/Brandi Carlile.jpg" alt="Brandi Carlile" onerror="this.parentElement.innerHTML='<div class=\"artist-placeholder\">B</div>'"></div>
+  <div class="artist-img-wrap"><img class="artist-img" src="images/Brandi%20Carlile.jpg" alt="Brandi Carlile" onerror="this.parentElement.innerHTML='<div class=\"artist-placeholder\">B</div>'"></div>
   <div class="artist-name">Brandi Carlile</div>
   <div class="tap-hint">info</div>
 </div>
@@ -990,37 +959,18 @@
 
   </main>
 
-  <!-- ── Footer ──────────────────────────────────────────────── -->
   <footer class="footer">
-    <div class="footer-left">Generated 3/3/2026, 11:46:12 AM ET · Musictoday Internal</div>
+    <div class="footer-left">Generated 3/3/2026, 12:36:08 PM ET · Musictoday Internal</div>
     <a href="/download" class="download-btn">↓ Download PDF</a>
   </footer>
 
 </div>
 
-<!-- ── Modals ─────────────────────────────────────────────────── -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- ── Single modal overlay ───────────────────────────────────── -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
   <div class="modal" id="modalContent"></div>
 </div>
 
 <script>
-  // Artist data map for modal population
   const artistData = {
   "Stevie Wonder": {
     "name": "Stevie Wonder",
@@ -1033,7 +983,7 @@
         "significant": false
       }
     ],
-    "imageUrl": "images/Stevie Wonder.jpg"
+    "imageUrl": "images/Stevie%20Wonder.jpg"
   },
   "Genesis": {
     "name": "Genesis",
@@ -1059,7 +1009,7 @@
         "significant": false
       }
     ],
-    "imageUrl": "images/Frank Zappa.jpg"
+    "imageUrl": "images/Frank%20Zappa.jpg"
   },
   "Loretta Lynn": {
     "name": "Loretta Lynn",
@@ -1072,7 +1022,7 @@
         "significant": false
       }
     ],
-    "imageUrl": "images/Loretta Lynn.jpg"
+    "imageUrl": "images/Loretta%20Lynn.jpg"
   },
   "Metallica": {
     "name": "Metallica",
@@ -1098,7 +1048,7 @@
         "significant": false
       }
     ],
-    "imageUrl": "images/De La Soul.jpg"
+    "imageUrl": "images/De%20La%20Soul.jpg"
   },
   "AJR": {
     "name": "AJR",
@@ -1130,7 +1080,7 @@
         "significant": false
       }
     ],
-    "imageUrl": "images/Foo Fighters.jpg"
+    "imageUrl": "images/Foo%20Fighters.jpg"
   },
   "Camila Cabello": {
     "name": "Camila Cabello",
@@ -1143,7 +1093,7 @@
         "significant": false
       }
     ],
-    "imageUrl": "images/Camila Cabello.jpg"
+    "imageUrl": "images/Camila%20Cabello.jpg"
   },
   "U2 Shop": {
     "name": "U2 Shop",
@@ -1182,7 +1132,7 @@
         "significant": false
       }
     ],
-    "imageUrl": "images/Dale Earnhardt Jr.jpg"
+    "imageUrl": "images/Dale%20Earnhardt%20Jr.jpg"
   },
   "ATO Records": {
     "name": "ATO Records",
@@ -1214,14 +1164,9 @@
         "significant": false
       }
     ],
-    "imageUrl": "images/Brandi Carlile.jpg"
+    "imageUrl": "images/Brandi%20Carlile.jpg"
   }
 };
-
-  function getArtistImageUrlClient(name) {
-    // Will be populated by server-side rendering
-    return null;
-  }
 
   function openModal(artistName) {
     const data = artistData[artistName];
