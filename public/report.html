@@ -2,194 +2,131 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=1280">
-  <title>MT Milestones — Monday, March 2, 2026</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MT Milestones — Wednesday, March 4, 2026</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    /* ── Reset & base ───────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:           #0D0D0F;
-      --surface:      #16161A;
-      --surface2:     #1E1E24;
-      --border:       #2A2A32;
-      --text:         #E8E8EE;
-      --text-muted:   #7A7A8C;
-      --text-dim:     #4A4A58;
-      --accent:       #CC1E1E;
-      --accent-glow:  rgba(204, 30, 30, 0.25);
-      --gold:         #E8B86D;
-      --green:        #7EC8A4;
-      --blue:         #85A8D0;
-      --red-soft:     #C47A7A;
-      --radius:       6px;
-      --font-head:    'Montserrat', sans-serif;
-      --font-body:    'Montserrat', sans-serif;
-      --font-mono:    'DM Mono', monospace;
+      --bg:         #0D0D0F;
+      --surface:    #16161A;
+      --surface2:   #1E1E24;
+      --border:     #2A2A32;
+      --text:       #E8E8EE;
+      --text-muted: #7A7A8C;
+      --text-dim:   #4A4A58;
+      --accent:     #CC1E1E;
+      --gold:       #E8B86D;
+      --green:      #7EC8A4;
+      --blue:       #85A8D0;
+      --red-soft:   #C47A7A;
+      --radius:     6px;
+      --font-head:  'Montserrat', sans-serif;
+      --font-mono:  'DM Mono', monospace;
+      /* How many rows are visible in TV mode */
+      --tv-rows:    12;
     }
 
     html, body {
-      width: 1280px;
-      min-height: 100vh;
+      width: 100%;
+      height: 100%;
       background: var(--bg);
       color: var(--text);
-      font-family: var(--font-body);
-      font-size: 13px;
+      font-family: var(--font-head);
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── Noise texture overlay ───────────────────────────── */
+    body.tv-mode  { overflow: hidden; }
+    body.expanded { overflow-y: auto; height: auto; }
+
     body::before {
       content: '';
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-      background-size: 200px 200px;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.5;
+      background-size: 200px;
+      pointer-events: none; z-index: 0; opacity: 0.5;
     }
 
-    /* ── Layout wrapper ─────────────────────────────────── */
+    /* ── Page shell ── */
     .page {
-      position: relative;
-      z-index: 1;
-      width: 1280px;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      position: relative; z-index: 1;
+      width: 100%;
+      display: flex; flex-direction: column;
     }
 
-    /* ── Header ─────────────────────────────────────────── */
+    body.tv-mode .page  { height: 100vh; overflow: hidden; }
+    body.expanded .page { height: auto; min-height: 100vh; }
+
+    /* ── Header ── */
     .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px 36px 18px;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 32px 12px;
       border-bottom: 1px solid var(--border);
-      background: linear-gradient(to bottom, rgba(204,30,30,0.06) 0%, transparent 100%);
+      background: linear-gradient(to bottom, rgba(204,30,30,0.06), transparent);
       position: relative;
-      overflow: hidden;
     }
 
     .header::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 1px;
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
       background: linear-gradient(to right, transparent, var(--accent), transparent);
       opacity: 0.6;
     }
 
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
+    .header-left  { display: flex; align-items: center; gap: 14px; }
+    .logo         { height: 32px; width: auto; }
 
-    .logo {
-      height: 36px;
-      width: auto;
-    }
-
-    .logo-fallback {
-      height: 36px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
+    .logo-fallback { height: 32px; display: flex; align-items: center; gap: 8px; }
     .logo-mark {
-      width: 36px;
-      height: 36px;
-      background: var(--accent);
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-head);
-      font-weight: 800;
-      font-size: 16px;
-      color: white;
-      letter-spacing: -1px;
+      width: 32px; height: 32px; background: var(--accent); border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 14px; color: white; letter-spacing: -1px;
     }
+    .logo-text { font-weight: 800; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; }
 
-    .logo-text {
-      font-family: var(--font-head);
-      font-weight: 800;
-      font-size: 15px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text);
-    }
+    .divider-v    { width: 1px; height: 24px; background: var(--border); }
+    .header-title { font-weight: 800; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-muted); }
+    .header-right { text-align: right; }
+    .header-date  { font-weight: 800; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
+    .header-count { font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+    .header-count span { color: var(--accent); font-weight: 500; }
 
-    .divider-v {
-      width: 1px;
-      height: 28px;
-      background: var(--border);
-    }
-
-    .header-title {
-      font-family: var(--font-head);
-      font-weight: 800;
-      font-size: 11px;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-
-    .header-right {
-      text-align: right;
-    }
-
-    .header-date {
-      font-family: var(--font-head);
-      font-weight: 800;
-      font-size: 13px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--text);
-    }
-
-    .header-count {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 3px;
-    }
-
-    .header-count span {
-      color: var(--accent);
-      font-weight: 500;
-    }
-
-    /* ── Main content area ──────────────────────────────── */
+    /* ── Content grid ── */
     .content {
       flex: 1;
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1fr 240px;
+      padding: 20px 32px;
       gap: 0;
-      padding: 28px 36px;
     }
 
-    /* ── Table section ──────────────────────────────────── */
+    /* In TV mode the content must not overflow */
+    body.tv-mode .content  { overflow: hidden; align-items: stretch; }
+    body.expanded .content { overflow: visible; align-items: start; }
+
+    /* ── Table column ── */
     .table-section {
-      flex: 1;
       min-width: 0;
+      display: flex;
+      flex-direction: column;
     }
 
     .section-label {
-      font-family: var(--font-head);
-      font-weight: 800;
-      font-size: 9px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      margin-bottom: 12px;
+      flex-shrink: 0;
+      font-weight: 800; font-size: 9px; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--text-dim); margin-bottom: 10px;
+    }
+
+    /* Wrapper grows to fill remaining height */
+    .table-wrapper {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
     }
 
     .milestone-table {
@@ -198,507 +135,250 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       overflow: hidden;
+      /* In TV mode, table fills the wrapper height */
+      height: 100%;
     }
 
     .milestone-table thead th {
       background: var(--surface2);
-      font-family: var(--font-head);
-      font-weight: 800;
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      padding: 10px 14px;
-      text-align: left;
+      font-weight: 800; font-size: 9px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--text-muted);
+      padding: 9px 14px; text-align: left;
       border-bottom: 1px solid var(--border);
     }
 
-    .milestone-table thead th:last-child {
-      text-align: center;
-    }
+    .milestone-table thead th:last-child { text-align: center; }
+
+    /* tbody fills remaining table height so rows stretch evenly */
+    .milestone-table tbody { height: 100%; }
 
     .milestone-table tbody tr {
       border-bottom: 1px solid var(--border);
       transition: background 0.15s;
     }
 
-    .milestone-table tbody tr:last-child {
-      border-bottom: none;
+    .milestone-table tbody tr:last-child { border-bottom: none; }
+    .milestone-table tbody tr:hover      { background: var(--surface2); }
+
+    body.tv-mode .milestone-table tbody tr.tv-hidden { display: none; }
+
+    .milestone-table td { padding: 0 14px; vertical-align: middle; font-size: 13px; }
+
+    /* Let row height grow naturally to fill space */
+    body.tv-mode .milestone-table tbody tr {
+      height: calc(100% / var(--tv-rows));
     }
 
-    .milestone-table tbody tr:hover {
-      background: var(--surface2);
+    body.expanded .milestone-table tbody tr {
+      height: auto;
     }
 
-    .milestone-table td {
+    body.expanded .milestone-table td {
       padding: 10px 14px;
-      vertical-align: middle;
     }
 
-    .td-artist {
-      font-family: var(--font-head);
-      font-weight: 700;
-      font-size: 13px;
-      color: var(--text);
-      white-space: nowrap;
-    }
-
-    .td-event {
-      font-size: 13px;
-      color: var(--text);
-      max-width: 340px;
-    }
-
-    .td-date {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-muted);
-      white-space: nowrap;
-    }
-
-    .td-type {
-      padding: 8px 14px;
-    }
+    .td-artist { font-weight: 700; white-space: nowrap; }
+    .td-event  { max-width: 36vw; }
+    .td-date   { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+    .td-type   { padding: 0 14px; }
 
     .badge {
       display: inline-block;
-      font-family: var(--font-head);
-      font-weight: 800;
-      font-size: 8px;
-      letter-spacing: 0.15em;
-      padding: 3px 7px;
-      border-radius: 3px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid currentColor;
-      opacity: 0.85;
+      font-weight: 800; font-size: 8px; letter-spacing: 0.15em;
+      padding: 3px 7px; border-radius: 3px;
+      background: rgba(255,255,255,0.06); border: 1px solid currentColor; opacity: 0.85;
     }
 
-    .td-anniversary {
-      text-align: center;
-      font-family: var(--font-mono);
-      font-size: 12px;
-    }
+    .td-anniversary { text-align: center; font-family: var(--font-mono); font-size: 11px; }
 
     .anniversary-chip {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 500;
+      display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500;
     }
 
     .anniversary-chip.significant {
-      background: rgba(232, 184, 109, 0.15);
-      color: var(--gold);
-      border: 1px solid rgba(232, 184, 109, 0.3);
+      background: rgba(232,184,109,0.15); color: var(--gold); border: 1px solid rgba(232,184,109,0.3);
     }
 
-    .anniversary-chip.normal {
-      color: var(--text-muted);
-    }
+    .anniversary-chip.normal { color: var(--text-muted); }
 
-    /* ── Artists section ────────────────────────────────── */
+    /* ── Artist sidebar ── */
     .artists-section {
-      flex: 0 0 280px;
-      padding-left: 28px; padding-top: 0;
+      padding-left: 20px;
       border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
     }
+
+    body.expanded .artists-section { overflow: visible; }
 
     .artist-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      flex-direction: column;
+      display: flex; flex-direction: column;
+      gap: 4px;
+      flex: 1;
     }
+
+    body.tv-mode .artist-card.tv-hidden { display: none; }
 
     .artist-card {
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-direction: row;
-      width: 100%;
-      padding: 8px;
-      border-radius: var(--radius);
-      border: 1px solid transparent;
+      display: flex; align-items: center; gap: 10px;
+      padding: 5px 8px;
+      border-radius: var(--radius); border: 1px solid transparent;
       transition: all 0.2s;
-      position: relative;
     }
 
-    .artist-card:hover {
-      background: var(--surface2);
-      border-color: var(--border);
-    }
-
-    .artist-card:hover .artist-img-wrap::after {
-      opacity: 1;
-    }
+    .artist-card:hover { background: var(--surface2); border-color: var(--border); }
+    .artist-card:hover .artist-img-wrap { border-color: var(--accent); }
 
     .artist-img-wrap {
-      position: relative;
       flex-shrink: 0;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      overflow: hidden;
-      background: var(--surface2);
-      border: 2px solid var(--border);
+      width: 42px; height: 42px;
+      border-radius: 50%; overflow: hidden;
+      background: var(--surface2); border: 2px solid var(--border);
       transition: border-color 0.2s;
     }
 
-    .artist-card:hover .artist-img-wrap {
-      border-color: var(--accent);
-    }
-
-    .artist-img-wrap::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(204,30,30,0.2);
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-
-    .artist-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .artist-img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
     .artist-placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-head);
-      font-weight: 800;
-      font-size: 14px;
-      color: var(--text-muted);
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 16px; color: var(--text-muted);
       background: linear-gradient(135deg, var(--surface2), var(--surface));
     }
 
     .artist-name {
-      font-family: var(--font-head);
-      font-weight: 700;
-      font-size: 12px;
-      color: var(--text);
-      
-      line-height: 1.2;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      font-weight: 700; font-size: 12px; color: var(--text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3;
     }
 
-    .tap-hint {
-      position: absolute;
-      bottom: auto;
-      right: 8px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 8px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      opacity: 0;
-      transition: opacity 0.2s;
-      font-family: var(--font-mono);
-    }
-
-    .artist-card:hover .tap-hint {
-      opacity: 1;
-    }
-
-    /* ── Empty state ────────────────────────────────────── */
+    /* ── Empty state ── */
     .empty-state {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      padding: 80px;
-      color: var(--text-dim);
+      grid-column: 1 / -1;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 14px; height: 60vh; color: var(--text-dim);
     }
 
-    .empty-icon {
-      font-size: 48px;
-      opacity: 0.3;
-    }
+    .empty-icon { font-size: 48px; opacity: 0.3; }
+    .empty-text { font-weight: 800; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; }
 
-    .empty-text {
-      font-family: var(--font-head);
-      font-weight: 800;
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-    }
-
-    /* ── Footer ─────────────────────────────────────────── */
+    /* ── Footer ── */
     .footer {
+      flex-shrink: 0;
       border-top: 1px solid var(--border);
-      padding: 12px 36px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      padding: 9px 32px;
+      display: flex; align-items: center; justify-content: space-between;
     }
 
-    .footer-left {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      color: var(--text-dim);
+    .footer-left  { font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); }
+    .footer-right { display: flex; align-items: center; gap: 10px; }
+
+    .expand-btn {
+      font-weight: 800; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text-dim); background: none;
+      border: 1px solid var(--text-dim); border-radius: var(--radius);
+      padding: 4px 10px; cursor: pointer; transition: all 0.15s; opacity: 0.45;
     }
+
+    .expand-btn:hover { color: var(--text-muted); border-color: var(--text-muted); opacity: 1; }
 
     .download-btn {
-      font-family: var(--font-head);
-      font-weight: 800;
-      font-size: 9px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      text-decoration: none;
-      padding: 6px 14px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      transition: all 0.15s;
+      font-weight: 800; font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none;
+      padding: 4px 10px; border: 1px solid var(--border);
+      border-radius: var(--radius); transition: all 0.15s;
     }
 
-    .download-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
+    .download-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* ── Modal ──────────────────────────────────────────── */
+    /* ── Modal ── */
     .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.8);
-      backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.25s;
     }
 
-    .modal-overlay.open {
-      opacity: 1;
-      pointer-events: all;
-    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
 
     .modal {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      width: 480px;
-      max-width: 90vw;
-      overflow: hidden;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; width: min(480px, 90vw); overflow: hidden;
       transform: translateY(20px) scale(0.97);
-      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.03);
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6);
     }
 
-    .modal-overlay.open .modal {
-      transform: translateY(0) scale(1);
-    }
+    .modal-overlay.open .modal { transform: translateY(0) scale(1); }
 
     .modal-img-wrap {
       width: 100%;
-      height: 220px;
-      overflow: hidden;
-      background: var(--surface2);
-      position: relative;
+      aspect-ratio: 1 / 1;
+      overflow: hidden; background: var(--surface2);
     }
 
-    .modal-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center top;
-    }
+    .modal-img { width: 100%; height: 100%; object-fit: cover; object-position: center center; display: block; }
 
     .modal-img-placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-head);
-      font-weight: 800;
-      font-size: 64px;
-      color: var(--text-dim);
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 64px; color: var(--text-dim);
       background: linear-gradient(135deg, var(--surface2), var(--bg));
     }
 
-    .modal-img-overlay {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 80px;
-      background: linear-gradient(to top, var(--surface), transparent);
-    }
-
-    .modal-body {
-      padding: 24px 28px 28px;
-    }
-
-    .modal-artist {
-      font-family: var(--font-head);
-      font-weight: 800;
-      font-size: 20px;
-      letter-spacing: -0.01em;
-      color: var(--text);
-      text-transform: uppercase;
-    }
-
-    .modal-event {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 4px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .modal-body    { padding: 20px 24px 24px; }
+    .modal-artist  { font-weight: 800; font-size: 18px; text-transform: uppercase; }
+    .modal-event   { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
 
     .modal-notes {
-      margin-top: 16px;
-      font-size: 13px;
-      line-height: 1.7;
-      color: var(--text);
-      border-top: 1px solid var(--border);
-      padding-top: 16px;
+      margin-top: 14px; font-size: 13px; line-height: 1.7;
+      border-top: 1px solid var(--border); padding-top: 14px;
     }
 
-    .modal-no-notes {
-      font-style: italic;
-      color: var(--text-muted);
-    }
-
-    .modal-milestones {
-      margin-top: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
+    .modal-no-notes { font-style: italic; color: var(--text-muted); }
+    .modal-milestones { margin-top: 12px; display: flex; flex-direction: column; gap: 4px; }
 
     .modal-milestone-row {
-      font-size: 11px;
-      color: var(--text-muted);
-      display: flex;
-      justify-content: space-between;
-      padding: 4px 0;
-      border-bottom: 1px solid var(--border);
+      font-size: 11px; color: var(--text-muted);
+      display: flex; justify-content: space-between;
+      padding: 4px 0; border-bottom: 1px solid var(--border);
     }
 
-    .modal-milestone-row:last-child {
-      border-bottom: none;
-    }
+    .modal-milestone-row:last-child { border-bottom: none; }
 
     .modal-close {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: rgba(0,0,0,0.4);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: white;
-      font-size: 14px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.15s;
-      z-index: 10;
+      position: absolute; top: 10px; right: 10px;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.15);
+      color: white; font-size: 13px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s; z-index: 10;
     }
 
-    .modal-close:hover {
-      background: var(--accent);
-    }
+    .modal-close:hover { background: var(--accent); }
 
-    /* ── Animations ─────────────────────────────────────── */
+    /* ── Animations ── */
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from { opacity:0; transform:translateY(6px); }
+      to   { opacity:1; transform:translateY(0); }
     }
 
-    .milestone-table tbody tr {
-      animation: fadeUp 0.3s ease both;
-    }
+    .milestone-table tbody tr { animation: fadeUp 0.25s ease both; }
+    .milestone-table tbody tr:nth-child(1){animation-delay:0ms};.milestone-table tbody tr:nth-child(2){animation-delay:18ms};.milestone-table tbody tr:nth-child(3){animation-delay:36ms};.milestone-table tbody tr:nth-child(4){animation-delay:54ms};.milestone-table tbody tr:nth-child(5){animation-delay:72ms};.milestone-table tbody tr:nth-child(6){animation-delay:90ms};.milestone-table tbody tr:nth-child(7){animation-delay:108ms};.milestone-table tbody tr:nth-child(8){animation-delay:126ms};.milestone-table tbody tr:nth-child(9){animation-delay:144ms};.milestone-table tbody tr:nth-child(10){animation-delay:162ms};.milestone-table tbody tr:nth-child(11){animation-delay:180ms};.milestone-table tbody tr:nth-child(12){animation-delay:198ms};.milestone-table tbody tr:nth-child(13){animation-delay:216ms};.milestone-table tbody tr:nth-child(14){animation-delay:234ms};.milestone-table tbody tr:nth-child(15){animation-delay:252ms};.milestone-table tbody tr:nth-child(16){animation-delay:270ms};.milestone-table tbody tr:nth-child(17){animation-delay:288ms};.milestone-table tbody tr:nth-child(18){animation-delay:306ms};.milestone-table tbody tr:nth-child(19){animation-delay:324ms};.milestone-table tbody tr:nth-child(20){animation-delay:342ms};.milestone-table tbody tr:nth-child(21){animation-delay:360ms};.milestone-table tbody tr:nth-child(22){animation-delay:378ms};.milestone-table tbody tr:nth-child(23){animation-delay:396ms};.milestone-table tbody tr:nth-child(24){animation-delay:414ms};.milestone-table tbody tr:nth-child(25){animation-delay:432ms};.milestone-table tbody tr:nth-child(26){animation-delay:450ms};.milestone-table tbody tr:nth-child(27){animation-delay:468ms};.milestone-table tbody tr:nth-child(28){animation-delay:486ms};.milestone-table tbody tr:nth-child(29){animation-delay:504ms};.milestone-table tbody tr:nth-child(30){animation-delay:522ms}
 
-    
-    .milestone-table tbody tr:nth-child(1) { animation-delay: 0ms; }
-    .milestone-table tbody tr:nth-child(2) { animation-delay: 30ms; }
-    .milestone-table tbody tr:nth-child(3) { animation-delay: 60ms; }
-    .milestone-table tbody tr:nth-child(4) { animation-delay: 90ms; }
-    .milestone-table tbody tr:nth-child(5) { animation-delay: 120ms; }
-    .milestone-table tbody tr:nth-child(6) { animation-delay: 150ms; }
-    .milestone-table tbody tr:nth-child(7) { animation-delay: 180ms; }
-    .milestone-table tbody tr:nth-child(8) { animation-delay: 210ms; }
-    .milestone-table tbody tr:nth-child(9) { animation-delay: 240ms; }
-    .milestone-table tbody tr:nth-child(10) { animation-delay: 270ms; }
-    .milestone-table tbody tr:nth-child(11) { animation-delay: 300ms; }
-    .milestone-table tbody tr:nth-child(12) { animation-delay: 330ms; }
-    .milestone-table tbody tr:nth-child(13) { animation-delay: 360ms; }
-    .milestone-table tbody tr:nth-child(14) { animation-delay: 390ms; }
-    .milestone-table tbody tr:nth-child(15) { animation-delay: 420ms; }
-    .milestone-table tbody tr:nth-child(16) { animation-delay: 450ms; }
-    .milestone-table tbody tr:nth-child(17) { animation-delay: 480ms; }
-    .milestone-table tbody tr:nth-child(18) { animation-delay: 510ms; }
-    .milestone-table tbody tr:nth-child(19) { animation-delay: 540ms; }
-    .milestone-table tbody tr:nth-child(20) { animation-delay: 570ms; }
-    .milestone-table tbody tr:nth-child(21) { animation-delay: 600ms; }
-    .milestone-table tbody tr:nth-child(22) { animation-delay: 630ms; }
-    .milestone-table tbody tr:nth-child(23) { animation-delay: 660ms; }
-    .milestone-table tbody tr:nth-child(24) { animation-delay: 690ms; }
-    .milestone-table tbody tr:nth-child(25) { animation-delay: 720ms; }
-    .milestone-table tbody tr:nth-child(26) { animation-delay: 750ms; }
-    .milestone-table tbody tr:nth-child(27) { animation-delay: 780ms; }
-    .milestone-table tbody tr:nth-child(28) { animation-delay: 810ms; }
-    .milestone-table tbody tr:nth-child(29) { animation-delay: 840ms; }
-    .milestone-table tbody tr:nth-child(30) { animation-delay: 870ms; }
-
-    .artist-card {
-      animation: fadeUp 0.4s ease both;
-    }
-
-    
-    .artist-card:nth-child(1) { animation-delay: 200ms; }
-    .artist-card:nth-child(2) { animation-delay: 250ms; }
-    .artist-card:nth-child(3) { animation-delay: 300ms; }
-    .artist-card:nth-child(4) { animation-delay: 350ms; }
-    .artist-card:nth-child(5) { animation-delay: 400ms; }
-    .artist-card:nth-child(6) { animation-delay: 450ms; }
-    .artist-card:nth-child(7) { animation-delay: 500ms; }
-    .artist-card:nth-child(8) { animation-delay: 550ms; }
-    .artist-card:nth-child(9) { animation-delay: 600ms; }
-    .artist-card:nth-child(10) { animation-delay: 650ms; }
-    .artist-card:nth-child(11) { animation-delay: 700ms; }
-    .artist-card:nth-child(12) { animation-delay: 750ms; }
-    .artist-card:nth-child(13) { animation-delay: 800ms; }
-    .artist-card:nth-child(14) { animation-delay: 850ms; }
-    .artist-card:nth-child(15) { animation-delay: 900ms; }
-    .artist-card:nth-child(16) { animation-delay: 950ms; }
-    .artist-card:nth-child(17) { animation-delay: 1000ms; }
-    .artist-card:nth-child(18) { animation-delay: 1050ms; }
-    .artist-card:nth-child(19) { animation-delay: 1100ms; }
-    .artist-card:nth-child(20) { animation-delay: 1150ms; }
+    .artist-card { animation: fadeUp 0.25s ease both; }
+    .artist-card:nth-child(1){animation-delay:80ms};.artist-card:nth-child(2){animation-delay:108ms};.artist-card:nth-child(3){animation-delay:136ms};.artist-card:nth-child(4){animation-delay:164ms};.artist-card:nth-child(5){animation-delay:192ms};.artist-card:nth-child(6){animation-delay:220ms};.artist-card:nth-child(7){animation-delay:248ms};.artist-card:nth-child(8){animation-delay:276ms};.artist-card:nth-child(9){animation-delay:304ms};.artist-card:nth-child(10){animation-delay:332ms};.artist-card:nth-child(11){animation-delay:360ms};.artist-card:nth-child(12){animation-delay:388ms};.artist-card:nth-child(13){animation-delay:416ms};.artist-card:nth-child(14){animation-delay:444ms};.artist-card:nth-child(15){animation-delay:472ms};.artist-card:nth-child(16){animation-delay:500ms};.artist-card:nth-child(17){animation-delay:528ms};.artist-card:nth-child(18){animation-delay:556ms};.artist-card:nth-child(19){animation-delay:584ms};.artist-card:nth-child(20){animation-delay:612ms}
   </style>
 </head>
-<body>
+<body class="tv-mode">
 <div class="page">
 
-  <!-- ── Header ──────────────────────────────────────────────── -->
   <header class="header">
     <div class="header-left">
-      <img
-        src="/mtlogo_long.png"
-        alt="Musictoday"
-        class="logo"
-        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
-      >
+      <img src="/mtlogo_long.png" alt="Musictoday" class="logo"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
       <div class="logo-fallback" style="display:none">
         <div class="logo-mark">mt</div>
         <div class="logo-text">musictoday</div>
@@ -707,529 +387,366 @@
       <div class="header-title">Today's Milestones</div>
     </div>
     <div class="header-right">
-      <div class="header-date">Monday, March 2, 2026</div>
-      <div class="header-count"><span>14</span> milestones today</div>
+      <div class="header-date">Wednesday, March 4, 2026</div>
+      <div class="header-count"><span>12</span> milestones today</div>
     </div>
   </header>
 
-  <!-- ── Main content ────────────────────────────────────────── -->
   <main class="content">
-
     
-    <!-- Table -->
+
     <div class="table-section">
       <div class="section-label">Client Milestones</div>
-      <table class="milestone-table">
-        <thead>
-          <tr>
-            <th>Artist / Client</th>
-            <th>Event</th>
-            <th>Original Date</th>
-            <th>Type</th>
-            <th>Anniversary</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-  <td class="td-artist">Lou Reed</td>
-  <td class="td-event">Lou Reed born</td>
-  <td class="td-date">Mar 2, 1943</td>
-  <td class="td-type">
-    <span class="badge" style="color: #7EC8A4; border-color: #7EC8A440;">BDAY</span>
-  </td>
-  <td class="td-anniversary">
-    <span class="anniversary-chip normal">83 yrs</span>
-  </td>
+      <div class="table-wrapper">
+        <table class="milestone-table">
+          <thead>
+            <tr>
+              <th>Artist / Client</th>
+              <th>Event</th>
+              <th>Original Date</th>
+              <th>Type</th>
+              <th>Anniversary</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+  <td class="td-artist">Yes</td>
+  <td class="td-event">Chris Squire born</td>
+  <td class="td-date">Mar 4, 1948</td>
+  <td class="td-type"><span class="badge" style="color:#7EC8A4;border-color:#7EC8A440">BDAY</span></td>
+  <td class="td-anniversary"><span class="anniversary-chip normal">78 yrs</span></td>
 </tr>
 <tr>
-  <td class="td-artist">Steely Dan</td>
-  <td class="td-event">Larry Carlton born</td>
-  <td class="td-date">Mar 2, 1948</td>
-  <td class="td-type">
-    <span class="badge" style="color: #7EC8A4; border-color: #7EC8A440;">BDAY</span>
-  </td>
-  <td class="td-anniversary">
-    <span class="anniversary-chip normal">78 yrs</span>
-  </td>
+  <td class="td-artist">Metallica</td>
+  <td class="td-event">Jason Newsted born</td>
+  <td class="td-date">Mar 4, 1964</td>
+  <td class="td-type"><span class="badge" style="color:#7EC8A4;border-color:#7EC8A440">BDAY</span></td>
+  <td class="td-anniversary"><span class="anniversary-chip normal">62 yrs</span></td>
 </tr>
 <tr>
-  <td class="td-artist">AC/DC</td>
-  <td class="td-event">Mark Evans born</td>
-  <td class="td-date">Mar 2, 1956</td>
-  <td class="td-type">
-    <span class="badge" style="color: #7EC8A4; border-color: #7EC8A440;">BDAY</span>
-  </td>
-  <td class="td-anniversary">
-    <span class="anniversary-chip significant">70 yrs</span>
-  </td>
+  <td class="td-artist">Paul McCartney</td>
+  <td class="td-event">The Beatles - Yesterday</td>
+  <td class="td-date">Mar 4, 1966</td>
+  <td class="td-type"><span class="badge" style="color:#E8B86D;border-color:#E8B86D40">EP</span></td>
+  <td class="td-anniversary"><span class="anniversary-chip significant">60 yrs</span></td>
 </tr>
 <tr>
-  <td class="td-artist">Johnny Cash</td>
-  <td class="td-event">Hymns by Johnny Cash album released</td>
-  <td class="td-date">Mar 2, 1959</td>
-  <td class="td-type">
-    <span class="badge" style="color: #E8B86D; border-color: #E8B86D40;">ALBUM</span>
-  </td>
-  <td class="td-anniversary">
-    <span class="anniversary-chip normal">67 yrs</span>
-  </td>
+  <td class="td-artist">Frank Zappa</td>
+  <td class="td-event">Mothers of Invention - We're Only In It For The Money album released</td>
+  <td class="td-date">Mar 4, 1968</td>
+  <td class="td-type"><span class="badge" style="color:#E8B86D;border-color:#E8B86D40">ALBUM</span></td>
+  <td class="td-anniversary"><span class="anniversary-chip normal">58 yrs</span></td>
 </tr>
 <tr>
-  <td class="td-artist">Bon Jovi</td>
-  <td class="td-event">Jon Bon Jovi born</td>
-  <td class="td-date">Mar 2, 1962</td>
-  <td class="td-type">
-    <span class="badge" style="color: #7EC8A4; border-color: #7EC8A440;">BDAY</span>
-  </td>
-  <td class="td-anniversary">
-    <span class="anniversary-chip normal">64 yrs</span>
-  </td>
+  <td class="td-artist">Modest Mouse</td>
+  <td class="td-event">Jeremiah Green (Former) born</td>
+  <td class="td-date">Mar 4, 77</td>
+  <td class="td-type"><span class="badge" style="color:#7EC8A4;border-color:#7EC8A440">BDAY</span></td>
+  <td class="td-anniversary"><span class="anniversary-chip normal">49 yrs</span></td>
 </tr>
 <tr>
-  <td class="td-artist">Wu-Tang Clan</td>
-  <td class="td-event">Method Man born</td>
-  <td class="td-date">Mar 2, 1971</td>
-  <td class="td-type">
-    <span class="badge" style="color: #7EC8A4; border-color: #7EC8A440;">BDAY</span>
-  </td>
-  <td class="td-anniversary">
-    <span class="anniversary-chip significant">55 yrs</span>
-  </td>
-</tr>
-<tr>
-  <td class="td-artist">Jerry Garcia</td>
-  <td class="td-event">Jerry, John Kahn, David Grisman, Peter Rowan, and Richard Greene perform for the first time as Old &amp; in the Way at the Record Plant in Sausalito, CA.</td>
-  <td class="td-date">Mar 2, 1973</td>
-  <td class="td-type">
-    <span class="badge" style="color: #85A8D0; border-color: #85A8D040;">EVENT</span>
-  </td>
-  <td class="td-anniversary">
-    <span class="anniversary-chip normal">53 yrs</span>
-  </td>
-</tr>
-<tr>
-  <td class="td-artist">Coldplay</td>
-  <td class="td-event">Chris Martin born</td>
-  <td class="td-date">Mar 2, 1977</td>
-  <td class="td-type">
-    <span class="badge" style="color: #7EC8A4; border-color: #7EC8A440;">BDAY</span>
-  </td>
-  <td class="td-anniversary">
-    <span class="anniversary-chip normal">49 yrs</span>
-  </td>
-</tr>
-<tr>
-  <td class="td-artist">Luke Combs</td>
-  <td class="td-event">Luke Combs born</td>
-  <td class="td-date">Mar 2, 90</td>
-  <td class="td-type">
-    <span class="badge" style="color: #7EC8A4; border-color: #7EC8A440;">BDAY</span>
-  </td>
-  <td class="td-anniversary">
-    <span class="anniversary-chip normal">36 yrs</span>
-  </td>
-</tr>
-<tr>
-  <td class="td-artist">Grace Potter</td>
-  <td class="td-event">Original Soul album released</td>
-  <td class="td-date">Mar 2, 2004</td>
-  <td class="td-type">
-    <span class="badge" style="color: #E8B86D; border-color: #E8B86D40;">ALBUM</span>
-  </td>
-  <td class="td-anniversary">
-    <span class="anniversary-chip normal">22 yrs</span>
-  </td>
-</tr>
-<tr>
-  <td class="td-artist">Corinne Bailey Rae</td>
-  <td class="td-event">NAACP Image Awards Winner - Outstanding New Artist</td>
-  <td class="td-date">Mar 2, 2007</td>
-  <td class="td-type">
-    <span class="badge" style="color: #888; border-color: #88840;">AWARD</span>
-  </td>
-  <td class="td-anniversary">
-    <span class="anniversary-chip normal">19 yrs</span>
-  </td>
-</tr>
-<tr>
-  <td class="td-artist">Nine Inch Nails</td>
-  <td class="td-event">Ghosts I-IV album released</td>
-  <td class="td-date">Mar 2, 2008</td>
-  <td class="td-type">
-    <span class="badge" style="color: #E8B86D; border-color: #E8B86D40;">ALBUM</span>
-  </td>
-  <td class="td-anniversary">
-    <span class="anniversary-chip normal">18 yrs</span>
-  </td>
+  <td class="td-artist">Jimi Hendrix</td>
+  <td class="td-event">People, Hell and Angels - UK Release</td>
+  <td class="td-date">Mar 4, 2013</td>
+  <td class="td-type"><span class="badge" style="color:#E8B86D;border-color:#E8B86D40">ALBUM</span></td>
+  <td class="td-anniversary"><span class="anniversary-chip normal">13 yrs</span></td>
 </tr>
 <tr>
   <td class="td-artist">ATO Records</td>
-  <td class="td-event">Nilüfer Yanya &quot;Born Yesterday&quot; album released</td>
-  <td class="td-date">Mar 2, 2018</td>
-  <td class="td-type">
-    <span class="badge" style="color: #E8B86D; border-color: #E8B86D40;">ALBUM</span>
-  </td>
-  <td class="td-anniversary">
-    <span class="anniversary-chip normal">8 yrs</span>
-  </td>
+  <td class="td-event">Drive-By Truckers &quot;English Oceans&quot; album releasd</td>
+  <td class="td-date">Mar 4, 2014</td>
+  <td class="td-type"><span class="badge" style="color:#E8B86D;border-color:#E8B86D40">ALBUM</span></td>
+  <td class="td-anniversary"><span class="anniversary-chip normal">12 yrs</span></td>
 </tr>
 <tr>
-  <td class="td-artist">BTS</td>
-  <td class="td-event">HOPE WORLD (J-Hope Solo) mixtape released</td>
-  <td class="td-date">Mar 2, 18</td>
-  <td class="td-type">
-    <span class="badge" style="color: #888; border-color: #88840;">MIXTA</span>
-  </td>
-  <td class="td-anniversary">
-    <span class="anniversary-chip normal">8 yrs</span>
-  </td>
+  <td class="td-artist">Drive-By Truckers</td>
+  <td class="td-event">English Oceans album released</td>
+  <td class="td-date">Mar 4, 2014</td>
+  <td class="td-type"><span class="badge" style="color:#E8B86D;border-color:#E8B86D40">ALBUM</span></td>
+  <td class="td-anniversary"><span class="anniversary-chip normal">12 yrs</span></td>
 </tr>
-        </tbody>
-      </table>
+<tr>
+  <td class="td-artist">Loretta Lynn</td>
+  <td class="td-event">Full Circle album released</td>
+  <td class="td-date">Mar 4, 2016</td>
+  <td class="td-type"><span class="badge" style="color:#E8B86D;border-color:#E8B86D40">ALBUM</span></td>
+  <td class="td-anniversary"><span class="anniversary-chip significant">10 yrs</span></td>
+</tr>
+<tr>
+  <td class="td-artist">Ray LaMontagne</td>
+  <td class="td-event">Ouroboros album released</td>
+  <td class="td-date">Mar 4, 2016</td>
+  <td class="td-type"><span class="badge" style="color:#E8B86D;border-color:#E8B86D40">ALBUM</span></td>
+  <td class="td-anniversary"><span class="anniversary-chip significant">10 yrs</span></td>
+</tr>
+<tr>
+  <td class="td-artist">TXT</td>
+  <td class="td-event">The Dream Chapter: STAR album released</td>
+  <td class="td-date">Mar 4, 19</td>
+  <td class="td-type"><span class="badge" style="color:#E8B86D;border-color:#E8B86D40">ALBUM</span></td>
+  <td class="td-anniversary"><span class="anniversary-chip normal">7 yrs</span></td>
+</tr>
+<tr>
+  <td class="td-artist">SHINee</td>
+  <td class="td-event">I Wanna Be (Key Solo) album released</td>
+  <td class="td-date">Mar 4, 19</td>
+  <td class="td-type"><span class="badge" style="color:#E8B86D;border-color:#E8B86D40">ALBUM</span></td>
+  <td class="td-anniversary"><span class="anniversary-chip normal">7 yrs</span></td>
+</tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
-    <!-- Artist image grid -->
     <div class="artists-section">
       <div class="section-label">Artists — click for details</div>
       <div class="artist-grid">
-        <div class="artist-card" onclick="openModal('Lou Reed')">
-  <div class="artist-img-wrap"><div class="artist-placeholder">L</div></div>
-  <div class="artist-name">Lou Reed</div>
-  <div class="tap-hint">info</div>
-</div>
-<div class="artist-card" onclick="openModal('Steely Dan')">
-  <div class="artist-img-wrap"><div class="artist-placeholder">S</div></div>
-  <div class="artist-name">Steely Dan</div>
-  <div class="tap-hint">info</div>
-</div>
-<div class="artist-card" onclick="openModal('AC/DC')">
-  <div class="artist-img-wrap"><div class="artist-placeholder">A</div></div>
-  <div class="artist-name">AC/DC</div>
-  <div class="tap-hint">info</div>
-</div>
-<div class="artist-card" onclick="openModal('Johnny Cash')">
-  <div class="artist-img-wrap"><div class="artist-placeholder">J</div></div>
-  <div class="artist-name">Johnny Cash</div>
-  <div class="tap-hint">info</div>
-</div>
-<div class="artist-card" onclick="openModal('Bon Jovi')">
-  <div class="artist-img-wrap"><div class="artist-placeholder">B</div></div>
-  <div class="artist-name">Bon Jovi</div>
-  <div class="tap-hint">info</div>
-</div>
-<div class="artist-card" onclick="openModal('Wu-Tang Clan')">
-  <div class="artist-img-wrap"><div class="artist-placeholder">W</div></div>
-  <div class="artist-name">Wu-Tang Clan</div>
-  <div class="tap-hint">info</div>
-</div>
-<div class="artist-card" onclick="openModal('Jerry Garcia')">
-  <div class="artist-img-wrap"><div class="artist-placeholder">J</div></div>
-  <div class="artist-name">Jerry Garcia</div>
-  <div class="tap-hint">info</div>
-</div>
-<div class="artist-card" onclick="openModal('Coldplay')">
-  <div class="artist-img-wrap"><div class="artist-placeholder">C</div></div>
-  <div class="artist-name">Coldplay</div>
-  <div class="tap-hint">info</div>
-</div>
-<div class="artist-card" onclick="openModal('Luke Combs')">
-  <div class="artist-img-wrap"><div class="artist-placeholder">L</div></div>
-  <div class="artist-name">Luke Combs</div>
-  <div class="tap-hint">info</div>
-</div>
-<div class="artist-card" onclick="openModal('Grace Potter')">
-  <div class="artist-img-wrap"><div class="artist-placeholder">G</div></div>
-  <div class="artist-name">Grace Potter</div>
-  <div class="tap-hint">info</div>
-</div>
-<div class="artist-card" onclick="openModal('Corinne Bailey Rae')">
-  <div class="artist-img-wrap"><div class="artist-placeholder">C</div></div>
-  <div class="artist-name">Corinne Bailey Rae</div>
-  <div class="tap-hint">info</div>
-</div>
-<div class="artist-card" onclick="openModal('Nine Inch Nails')">
-  <div class="artist-img-wrap"><div class="artist-placeholder">N</div></div>
-  <div class="artist-name">Nine Inch Nails</div>
-  <div class="tap-hint">info</div>
-</div>
-<div class="artist-card" onclick="openModal('ATO Records')">
-  <div class="artist-img-wrap"><div class="artist-placeholder">A</div></div>
-  <div class="artist-name">ATO Records</div>
-  <div class="tap-hint">info</div>
-</div>
-<div class="artist-card" onclick="openModal('BTS')">
-  <div class="artist-img-wrap"><div class="artist-placeholder">B</div></div>
-  <div class="artist-name">BTS</div>
-  <div class="tap-hint">info</div>
-</div>
+        <div class="artist-card" onclick="openModal('Yes')"><div class="artist-img-wrap"><img class="artist-img" src="images/Yes.jpg" alt="Yes" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">Y</div></div><div class="artist-name">Yes</div></div>
+<div class="artist-card" onclick="openModal('Metallica')"><div class="artist-img-wrap"><img class="artist-img" src="images/Metallica.jpg" alt="Metallica" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">M</div></div><div class="artist-name">Metallica</div></div>
+<div class="artist-card" onclick="openModal('Paul McCartney')"><div class="artist-img-wrap"><img class="artist-img" src="images/Paul%20McCartney.jpg" alt="Paul McCartney" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">P</div></div><div class="artist-name">Paul McCartney</div></div>
+<div class="artist-card" onclick="openModal('Frank Zappa')"><div class="artist-img-wrap"><img class="artist-img" src="images/Frank%20Zappa.jpg" alt="Frank Zappa" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">F</div></div><div class="artist-name">Frank Zappa</div></div>
+<div class="artist-card" onclick="openModal('Modest Mouse')"><div class="artist-img-wrap"><img class="artist-img" src="images/Modest%20Mouse.jpg" alt="Modest Mouse" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">M</div></div><div class="artist-name">Modest Mouse</div></div>
+<div class="artist-card" onclick="openModal('Jimi Hendrix')"><div class="artist-img-wrap"><img class="artist-img" src="images/Jimi%20Hendrix.jpg" alt="Jimi Hendrix" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">J</div></div><div class="artist-name">Jimi Hendrix</div></div>
+<div class="artist-card" onclick="openModal('ATO Records')"><div class="artist-img-wrap"><div class="artist-placeholder">A</div></div><div class="artist-name">ATO Records</div></div>
+<div class="artist-card" onclick="openModal('Drive-By Truckers')"><div class="artist-img-wrap"><img class="artist-img" src="images/Drive-By%20Truckers.jpg" alt="Drive-By Truckers" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">D</div></div><div class="artist-name">Drive-By Truckers</div></div>
+<div class="artist-card" onclick="openModal('Loretta Lynn')"><div class="artist-img-wrap"><img class="artist-img" src="images/Loretta%20Lynn.jpg" alt="Loretta Lynn" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">L</div></div><div class="artist-name">Loretta Lynn</div></div>
+<div class="artist-card" onclick="openModal('Ray LaMontagne')"><div class="artist-img-wrap"><img class="artist-img" src="images/Ray%20LaMontagne.jpg" alt="Ray LaMontagne" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">R</div></div><div class="artist-name">Ray LaMontagne</div></div>
+<div class="artist-card tv-hidden" onclick="openModal('TXT')"><div class="artist-img-wrap"><img class="artist-img" src="images/TXT.jpg" alt="TXT" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">T</div></div><div class="artist-name">TXT</div></div>
+<div class="artist-card tv-hidden" onclick="openModal('SHINee')"><div class="artist-img-wrap"><img class="artist-img" src="images/SHINee.jpg" alt="SHINee" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="artist-placeholder" style="display:none">S</div></div><div class="artist-name">SHINee</div></div>
       </div>
     </div>
-    
-
   </main>
 
-  <!-- ── Footer ──────────────────────────────────────────────── -->
   <footer class="footer">
-    <div class="footer-left">Generated 3/2/2026, 1:09:25 AM ET · Musictoday Internal</div>
-    <a href="/download" class="download-btn">↓ Download PDF</a>
+    <div class="footer-left">
+      Generated 3/4/2026, 2:36:37 AM ET · Musictoday Internal
+    </div>
+    <div class="footer-right">
+      <button class="expand-btn" id="expandBtn" onclick="toggleExpand()">Show all ↓</button>
+      <a href="/download" class="download-btn">↓ Download PDF</a>
+    </div>
   </footer>
 
 </div>
 
-<!-- ── Modals ─────────────────────────────────────────────────── -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- ── Single modal overlay ───────────────────────────────────── -->
+<!-- Modal -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
   <div class="modal" id="modalContent"></div>
 </div>
 
 <script>
-  // Artist data map for modal population
   const artistData = {
-  "Lou Reed": {
-    "name": "Lou Reed",
-    "notes": " ",
+  "Yes": {
+    "name": "Yes",
+    "notes": "Born Christopher Russell Edward Squire, he became one of progressive rock's most influential bass players and the only member to appear on every Yes studio album until his death. His distinctive Rickenbacker bass sound and complex playing style helped define the band's signature sound across their most celebrated works.",
+    "imageUrl": "images/Yes.jpg",
     "milestones": [
       {
-        "event": "Lou Reed born",
-        "date": "3/2/1943",
-        "anniversary": "83",
-        "significant": false
-      }
-    ],
-    "imageUrl": null
-  },
-  "Steely Dan": {
-    "name": "Steely Dan",
-    "notes": " ",
-    "milestones": [
-      {
-        "event": "Larry Carlton born",
-        "date": "3/2/1948",
+        "event": "Chris Squire born",
+        "date": "3/4/1948",
         "anniversary": "78",
         "significant": false
       }
-    ],
-    "imageUrl": null
+    ]
   },
-  "AC/DC": {
-    "name": "AC/DC",
-    "notes": " ",
+  "Metallica": {
+    "name": "Metallica",
+    "notes": "Celebrates the birth of Jason Curtis Newsted in Battle Creek, Michigan, who faced the impossible task of replacing the beloved Cliff Burton in Metallica. Despite intense fan scrutiny, his solid bass playing and stage presence helped the band achieve massive commercial success on albums like ...And Justice for All and the Black Album. His 14-year tenure with the band included their transformation from underground thrash legends to global superstars.",
+    "imageUrl": "images/Metallica.jpg",
     "milestones": [
       {
-        "event": "Mark Evans born",
-        "date": "3/2/1956",
-        "anniversary": "70",
+        "event": "Jason Newsted born",
+        "date": "3/4/1964",
+        "anniversary": "62",
+        "significant": false
+      }
+    ]
+  },
+  "Paul McCartney": {
+    "name": "Paul McCartney",
+    "notes": "This EP release featured Paul McCartney's \"Yesterday\" as the lead track, along with \"Act Naturally\" and \"You Like Me Too Much.\" The release was significant as \"Yesterday\" became one of the most covered songs in popular music history, showcasing McCartney's melodic genius with its simple yet profound arrangement featuring just vocals and strings. The EP format allowed fans to own this classic ballad alongside other Beatles favorites.",
+    "imageUrl": "images/Paul%20McCartney.jpg",
+    "milestones": [
+      {
+        "event": "The Beatles - Yesterday",
+        "date": "3/4/1966",
+        "anniversary": "60",
         "significant": true
       }
-    ],
-    "imageUrl": null
+    ]
   },
-  "Johnny Cash": {
-    "name": "Johnny Cash",
-    "notes": " ",
+  "Frank Zappa": {
+    "name": "Frank Zappa",
+    "notes": "This satirical masterpiece served as Zappa's scathing commentary on 1960s counterculture and the music industry itself. The album parodied The Beatles' \"Sgt. Pepper's\" while delivering sharp social criticism through tracks like \"We're Only in It for the Money\" and \"Flower Punk.\" Its complex arrangements and biting humor demonstrated Zappa's ability to create serious musical art while skewering the very scene he inhabited.",
+    "imageUrl": "images/Frank%20Zappa.jpg",
     "milestones": [
       {
-        "event": "Hymns by Johnny Cash album released",
-        "date": "3/2/1959",
-        "anniversary": "67",
+        "event": "Mothers of Invention - We're Only In It For The Money album released",
+        "date": "3/4/1968",
+        "anniversary": "58",
         "significant": false
       }
-    ],
-    "imageUrl": null
+    ]
   },
-  "Bon Jovi": {
-    "name": "Bon Jovi",
-    "notes": " ",
+  "Modest Mouse": {
+    "name": "Modest Mouse",
+    "notes": "The longtime drummer was a founding member and rhythmic backbone of Modest Mouse for over two decades until his departure in 2012. His inventive, often unconventional drumming style was integral to classics like \"Float On\" and helped define the band's distinctive Pacific Northwest indie rock sound.",
+    "imageUrl": "images/Modest%20Mouse.jpg",
     "milestones": [
       {
-        "event": "Jon Bon Jovi born",
-        "date": "3/2/1962",
-        "anniversary": "64",
-        "significant": false
-      }
-    ],
-    "imageUrl": null
-  },
-  "Wu-Tang Clan": {
-    "name": "Wu-Tang Clan",
-    "notes": " ",
-    "milestones": [
-      {
-        "event": "Method Man born",
-        "date": "3/2/1971",
-        "anniversary": "55",
-        "significant": true
-      }
-    ],
-    "imageUrl": null
-  },
-  "Jerry Garcia": {
-    "name": "Jerry Garcia",
-    "notes": " ",
-    "milestones": [
-      {
-        "event": "Jerry, John Kahn, David Grisman, Peter Rowan, and Richard Greene perform for the first time as Old & in the Way at the Record Plant in Sausalito, CA.",
-        "date": "3/2/1973",
-        "anniversary": "53",
-        "significant": false
-      }
-    ],
-    "imageUrl": null
-  },
-  "Coldplay": {
-    "name": "Coldplay",
-    "notes": " ",
-    "milestones": [
-      {
-        "event": "Chris Martin born",
-        "date": "3/2/1977",
+        "event": "Jeremiah Green (Former) born",
+        "date": "3/4/77",
         "anniversary": "49",
         "significant": false
       }
-    ],
-    "imageUrl": null
+    ]
   },
-  "Luke Combs": {
-    "name": "Luke Combs",
-    "notes": " ",
+  "Jimi Hendrix": {
+    "name": "Jimi Hendrix",
+    "notes": "Marks the 12th anniversary of this UK release featuring 12 previously unreleased studio tracks from 1968-1969. The album reached number 2 on the UK charts and showcased alternate versions of known songs alongside completely unheard material. Tracks like 'Earth Blues' and 'Somewhere' demonstrated Hendrix's continued creative evolution and provided fans with substantial new material decades after his death.",
+    "imageUrl": "images/Jimi%20Hendrix.jpg",
     "milestones": [
       {
-        "event": "Luke Combs born",
-        "date": "3/2/90",
-        "anniversary": "36",
+        "event": "People, Hell and Angels - UK Release",
+        "date": "3/4/2013",
+        "anniversary": "13",
         "significant": false
       }
-    ],
-    "imageUrl": null
-  },
-  "Grace Potter": {
-    "name": "Grace Potter",
-    "notes": " ",
-    "milestones": [
-      {
-        "event": "Original Soul album released",
-        "date": "3/2/2004",
-        "anniversary": "22",
-        "significant": false
-      }
-    ],
-    "imageUrl": null
-  },
-  "Corinne Bailey Rae": {
-    "name": "Corinne Bailey Rae",
-    "notes": " ",
-    "milestones": [
-      {
-        "event": "NAACP Image Awards Winner - Outstanding New Artist",
-        "date": "3/2/2007",
-        "anniversary": "19",
-        "significant": false
-      }
-    ],
-    "imageUrl": null
-  },
-  "Nine Inch Nails": {
-    "name": "Nine Inch Nails",
-    "notes": " ",
-    "milestones": [
-      {
-        "event": "Ghosts I-IV album released",
-        "date": "3/2/2008",
-        "anniversary": "18",
-        "significant": false
-      }
-    ],
-    "imageUrl": null
+    ]
   },
   "ATO Records": {
     "name": "ATO Records",
-    "notes": " ",
+    "notes": "The Southern rock stalwarts' eleventh studio album continued their tradition of politically charged storytelling while exploring more personal themes. Recorded during a tumultuous period in American politics, the album balanced the band's punk-influenced energy with more reflective, introspective songwriting.",
+    "imageUrl": null,
     "milestones": [
       {
-        "event": "Nilüfer Yanya \"Born Yesterday\" album released",
-        "date": "3/2/2018",
-        "anniversary": "8",
+        "event": "Drive-By Truckers \"English Oceans\" album releasd",
+        "date": "3/4/2014",
+        "anniversary": "12",
         "significant": false
       }
-    ],
-    "imageUrl": null
+    ]
   },
-  "BTS": {
-    "name": "BTS",
-    "notes": " ",
+  "Drive-By Truckers": {
+    "name": "Drive-By Truckers",
+    "notes": "English Oceans marks the band's return to ATO Records and their eleventh studio album. The record found the group exploring more personal and political themes while maintaining their signature Southern rock sound. Standout tracks like \"Made Up English Oceans\" and \"Pauline Hawkins\" showcased the songwriting chemistry between Patterson Hood and Mike Cooley.",
+    "imageUrl": "images/Drive-By%20Truckers.jpg",
     "milestones": [
       {
-        "event": "HOPE WORLD (J-Hope Solo) mixtape released",
-        "date": "3/2/18",
-        "anniversary": "8",
+        "event": "English Oceans album released",
+        "date": "3/4/2014",
+        "anniversary": "12",
         "significant": false
       }
-    ],
-    "imageUrl": null
+    ]
+  },
+  "Loretta Lynn": {
+    "name": "Loretta Lynn",
+    "notes": "This remarkable comeback album was recorded when Lynn was 83 years old, proving her enduring artistry and vocal power. Produced at her ranch in Tennessee, the record demonstrated that her storytelling abilities and distinctive voice remained as compelling as ever after more than five decades in music.",
+    "imageUrl": "images/Loretta%20Lynn.jpg",
+    "milestones": [
+      {
+        "event": "Full Circle album released",
+        "date": "3/4/2016",
+        "anniversary": "10",
+        "significant": true
+      }
+    ]
+  },
+  "Ray LaMontagne": {
+    "name": "Ray LaMontagne",
+    "notes": "LaMontagne's sixth studio album marked a bold departure into psychedelic rock territory, featuring his band The Pariah Dogs. The album was entirely self-produced and represented his most experimental work to date. Critics praised its dreamy, atmospheric sound while noting its departure from his signature folk style.",
+    "imageUrl": "images/Ray%20LaMontagne.jpg",
+    "milestones": [
+      {
+        "event": "Ouroboros album released",
+        "date": "3/4/2016",
+        "anniversary": "10",
+        "significant": true
+      }
+    ]
+  },
+  "TXT": {
+    "name": "TXT",
+    "notes": "This debut EP from Big Hit Entertainment's second boy group launched TXT into the competitive K-pop scene with impressive first-week sales and international chart success. Lead single \"Crown\" introduced their youthful, fantasy-themed concept that distinguished them from their BTS labelmates. The album's cohesive storytelling and high production values established TXT as serious players in the fourth generation of K-pop groups.",
+    "imageUrl": "images/TXT.jpg",
+    "milestones": [
+      {
+        "event": "The Dream Chapter: STAR album released",
+        "date": "3/4/19",
+        "anniversary": "7",
+        "significant": false
+      }
+    ]
+  },
+  "SHINee": {
+    "name": "SHINee",
+    "notes": "Celebrates another Key solo release that furthered his reputation for innovative and genre-blending music. The album showcased his ability to consistently deliver fresh creative content as an individual artist.",
+    "imageUrl": "images/SHINee.jpg",
+    "milestones": [
+      {
+        "event": "I Wanna Be (Key Solo) album released",
+        "date": "3/4/19",
+        "anniversary": "7",
+        "significant": false
+      }
+    ]
   }
 };
 
-  function getArtistImageUrlClient(name) {
-    // Will be populated by server-side rendering
-    return null;
+  let expanded = false;
+
+  function toggleExpand() {
+    expanded = !expanded;
+    document.body.classList.toggle("tv-mode", !expanded);
+    document.body.classList.toggle("expanded", expanded);
+    const btn = document.getElementById("expandBtn");
+    if (btn) btn.textContent = expanded ? "Collapse ↑" : "Show all ↓";
+    if (!expanded) window.scrollTo(0, 0);
   }
+
+  // Reload at 1:00 AM daily to pick up the fresh report after the cron job
+  function scheduleRefresh() {
+    const now = new Date();
+    const next = new Date();
+    next.setHours(1, 0, 0, 0);
+    if (next <= now) next.setDate(next.getDate() + 1);
+    setTimeout(() => { if (!expanded) window.location.reload(); }, next - now);
+  }
+  scheduleRefresh();
 
   function openModal(artistName) {
     const data = artistData[artistName];
     if (!data) return;
-
     const overlay = document.getElementById("modalOverlay");
     const content = document.getElementById("modalContent");
 
     const imgHtml = data.imageUrl
       ? `<div class="modal-img-wrap">
-           <img class="modal-img" src="${data.imageUrl}" alt="${data.name}" onerror="this.parentElement.innerHTML='<div class=\"modal-img-placeholder\">${data.name.charAt(0)}</div>'">
-           <div class="modal-img-overlay"></div>
-           <button class="modal-close" onclick="closeModal()">✕</button>
+           <img class="modal-img" src="${data.imageUrl}" alt="${data.name}"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+           <div class="modal-img-placeholder" style="display:none">${data.name.charAt(0)}</div>
+           <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open')">✕</button>
          </div>`
       : `<div class="modal-img-wrap">
            <div class="modal-img-placeholder">${data.name.charAt(0)}</div>
-           <div class="modal-img-overlay"></div>
-           <button class="modal-close" onclick="closeModal()">✕</button>
+           <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open')">✕</button>
          </div>`;
 
-    const todayMilestones = data.milestones.map(m =>
+    const milestoneRows = data.milestones.map(m =>
       `<div class="modal-milestone-row">
-        <span>${m.event}</span>
-        <span style="color: ${m.significant ? 'var(--gold)' : 'var(--text-muted)'}; font-weight: 500;">${m.anniversary}-Year</span>
+         <span>${m.event}</span>
+         <span style="color:${m.significant?'var(--gold)':'var(--text-muted)'};font-weight:500">${m.anniversary}-Year</span>
        </div>`
     ).join("");
 
-    content.innerHTML = `
-      ${imgHtml}
+    content.innerHTML = `${imgHtml}
       <div class="modal-body">
         <div class="modal-artist">${data.name}</div>
-        <div class="modal-event">
-          <span>${data.milestones.length} milestone${data.milestones.length !== 1 ? "s" : ""} today</span>
-        </div>
-        <div class="modal-notes">
-          ${data.notes
-            ? data.notes
-            : '<span class="modal-no-notes">Historical notes coming soon.</span>'}
-        </div>
-        ${data.milestones.length > 1 ? `<div class="modal-milestones">${todayMilestones}</div>` : ""}
-      </div>
-    `;
+        <div class="modal-event">${data.milestones.length} milestone${data.milestones.length!==1?"s":""} today</div>
+        <div class="modal-notes">${data.notes||'<span class="modal-no-notes">Historical notes coming soon.</span>'}</div>
+        ${data.milestones.length>1?`<div class="modal-milestones">${milestoneRows}</div>`:""}
+      </div>`;
 
     overlay.classList.add("open");
   }
@@ -1239,7 +756,7 @@
     document.getElementById("modalOverlay").classList.remove("open");
   }
 
-  document.addEventListener("keydown", (e) => {
+  document.addEventListener("keydown", e => {
     if (e.key === "Escape") document.getElementById("modalOverlay").classList.remove("open");
   });
 </script>
