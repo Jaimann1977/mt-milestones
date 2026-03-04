@@ -4,7 +4,7 @@
  * TV Mode (default): 100vw × 100vh, no scroll, 14 rows + 10 artists shown.
  *   Rows stretch to fill the full available height — no blank space.
  * Expanded Mode: full scroll, all rows, toggled by subtle footer button.
- * Auto-refresh: every 5 minutes in TV mode.
+ * Auto-refresh: daily at 1:00 AM (after cron job + Render deploy).
  *
  * Usage:  node scripts/generate-report.js [YYYY-MM-DD]
  */
@@ -18,7 +18,6 @@ const OUTPUT_PATH = path.join(__dirname, "../public/report.html");
 
 const TV_MAX_ROWS    = 14;
 const TV_MAX_ARTISTS = 10;
-const REFRESH_MS     = 5 * 60 * 1000;
 
 // ─── Date helpers ─────────────────────────────────────────────────────────────
 function getTodayString() {
@@ -590,8 +589,15 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
     if (!expanded) window.scrollTo(0, 0);
   }
 
-  // Auto-refresh every 5 min, only in TV mode
-  setInterval(() => { if (!expanded) window.location.reload(); }, ${REFRESH_MS});
+  // Reload at 1:00 AM daily to pick up the fresh report after the cron job
+  function scheduleRefresh() {
+    const now = new Date();
+    const next = new Date();
+    next.setHours(1, 0, 0, 0);
+    if (next <= now) next.setDate(next.getDate() + 1);
+    setTimeout(() => { if (!expanded) window.location.reload(); }, next - now);
+  }
+  scheduleRefresh();
 
   function openModal(artistName) {
     const data = artistData[artistName];
