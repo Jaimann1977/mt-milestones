@@ -169,6 +169,14 @@
       height: calc(100% / var(--tv-rows));
     }
 
+    body.expanded .milestone-table tbody tr {
+      height: auto;
+    }
+
+    body.expanded .milestone-table td {
+      padding: 10px 14px;
+    }
+
     .td-artist { font-weight: 700; white-space: nowrap; }
     .td-event  { max-width: 36vw; }
     .td-date   { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); white-space: nowrap; }
@@ -515,7 +523,7 @@
 
   <footer class="footer">
     <div class="footer-left">
-      Generated 3/3/2026, 11:37:03 PM ET · Musictoday Internal
+      Generated 3/4/2026, 12:43:22 AM ET · Musictoday Internal
     </div>
     <div class="footer-right">
       <button class="expand-btn" id="expandBtn" onclick="toggleExpand()">Show all ↓</button>
