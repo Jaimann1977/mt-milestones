@@ -523,7 +523,7 @@
 
   <footer class="footer">
     <div class="footer-left">
-      Generated 3/4/2026, 12:48:54 AM ET · Musictoday Internal
+      Generated 3/4/2026, 1:47:07 AM ET · Musictoday Internal
     </div>
     <div class="footer-right">
       <button class="expand-btn" id="expandBtn" onclick="toggleExpand()">Show all ↓</button>
@@ -709,8 +709,15 @@
     if (!expanded) window.scrollTo(0, 0);
   }
 
-  // Auto-refresh every 5 min, only in TV mode
-  setInterval(() => { if (!expanded) window.location.reload(); }, 300000);
+  // Reload at 1:00 AM daily to pick up the fresh report after the cron job
+  function scheduleRefresh() {
+    const now = new Date();
+    const next = new Date();
+    next.setHours(1, 0, 0, 0);
+    if (next <= now) next.setDate(next.getDate() + 1);
+    setTimeout(() => { if (!expanded) window.location.reload(); }, next - now);
+  }
+  scheduleRefresh();
 
   function openModal(artistName) {
     const data = artistData[artistName];
