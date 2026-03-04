@@ -376,7 +376,39 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3;
     }
 
-    /* ── Empty state ── */
+    /* ── More rows hint arrow (TV mode only) ── */
+    .more-hint {
+      display: none;
+    }
+
+    body.tv-mode .more-hint {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 6px 0 2px;
+      cursor: pointer;
+    }
+
+    body.tv-mode .more-hint-arrow {
+      width: 0; height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 7px solid var(--accent);
+      animation: bounceDown 1.4s ease-in-out infinite;
+    }
+
+    body.tv-mode .more-hint-label {
+      font-weight: 800; font-size: 9px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--accent); opacity: 0.8;
+    }
+
+    @keyframes bounceDown {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(4px); }
+    }
+
+    body.expanded .more-hint { display: none !important; }
     .empty-state {
       grid-column: 1 / -1;
       display: flex; flex-direction: column;
@@ -399,13 +431,13 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
     .footer-right { display: flex; align-items: center; gap: 10px; }
 
     .expand-btn {
-      font-weight: 800; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--text-dim); background: none;
-      border: 1px solid var(--text-dim); border-radius: var(--radius);
-      padding: 4px 10px; cursor: pointer; transition: all 0.15s; opacity: 0.45;
+      font-weight: 800; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--gold); background: rgba(232,184,109,0.08);
+      border: 1px solid rgba(232,184,109,0.5); border-radius: var(--radius);
+      padding: 5px 12px; cursor: pointer; transition: all 0.2s;
     }
 
-    .expand-btn:hover { color: var(--text-muted); border-color: var(--text-muted); opacity: 1; }
+    .expand-btn:hover { background: rgba(232,184,109,0.18); border-color: var(--gold); }
 
     .download-btn {
       font-weight: 800; font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase;
@@ -544,6 +576,11 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
           </tbody>
         </table>
       </div>
+      ${hasExtra ? `<div class="more-hint" onclick="toggleExpand()">
+        <div class="more-hint-arrow"></div>
+        <span class="more-hint-label">More</span>
+        <div class="more-hint-arrow"></div>
+      </div>` : ""}
     </div>
 
     <div class="artists-section">
