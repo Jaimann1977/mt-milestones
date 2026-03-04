@@ -437,22 +437,18 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
     .modal-overlay.open .modal { transform: translateY(0) scale(1); }
 
     .modal-img-wrap {
-      width: 100%; height: 200px;
-      overflow: hidden; background: var(--surface2); position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden; background: var(--surface2);
     }
 
-    .modal-img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+    .modal-img { width: 100%; height: 100%; object-fit: cover; object-position: center center; display: block; }
 
     .modal-img-placeholder {
       width: 100%; height: 100%;
       display: flex; align-items: center; justify-content: center;
       font-weight: 800; font-size: 64px; color: var(--text-dim);
       background: linear-gradient(135deg, var(--surface2), var(--bg));
-    }
-
-    .modal-img-overlay {
-      position: absolute; bottom: 0; left: 0; right: 0; height: 60px;
-      background: linear-gradient(to top, var(--surface), transparent);
     }
 
     .modal-body    { padding: 20px 24px 24px; }
@@ -610,12 +606,10 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
            <img class="modal-img" src="\${data.imageUrl}" alt="\${data.name}"
              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
            <div class="modal-img-placeholder" style="display:none">\${data.name.charAt(0)}</div>
-           <div class="modal-img-overlay"></div>
            <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open')">✕</button>
          </div>\`
       : \`<div class="modal-img-wrap">
            <div class="modal-img-placeholder">\${data.name.charAt(0)}</div>
-           <div class="modal-img-overlay"></div>
            <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open')">✕</button>
          </div>\`;
 
