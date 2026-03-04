@@ -293,6 +293,14 @@ function buildHTML(milestones, uniqueArtists, todayStr) {
       height: calc(100% / var(--tv-rows));
     }
 
+    body.expanded .milestone-table tbody tr {
+      height: auto;
+    }
+
+    body.expanded .milestone-table td {
+      padding: 10px 14px;
+    }
+
     .td-artist { font-weight: 700; white-space: nowrap; }
     .td-event  { max-width: 36vw; }
     .td-date   { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); white-space: nowrap; }
